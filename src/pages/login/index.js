@@ -22,6 +22,7 @@ import {
   where
 } from 'firebase/firestore';
 import { database } from 'config/direabse.config';
+import { CircularProgress } from '../../../node_modules/@mui/material/index';
 
 function Copyright(props) {
   return (
@@ -39,12 +40,14 @@ const defaultTheme = createTheme();
 
 export default function Login() {
   const [telValue, setTelValue] = React.useState('');
+  const [loading,setLoading] = React.useState(false);
   const handleChange = (event) => {
     const newValue = event.target.value.replace(/\D/g, '').slice(0, 10); // Remove non-numeric characters and limit to 10 digits
     setTelValue(newValue);
   };
   const navigate = useNavigate();
   const handleSubmit = async (event) => {
+    setLoading(true);
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
@@ -57,6 +60,7 @@ export default function Login() {
       navigate('/app/gutura');
       window.location.reload()
     }
+    setLoading(false);
   };
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -75,7 +79,7 @@ export default function Login() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Injira mu kibina
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
@@ -130,7 +134,11 @@ export default function Login() {
             /> */}
             <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-              Sign In
+              {loading ? (
+                <CircularProgress />
+              ): (
+                <span>Injira</span>
+              )}
             </Button>
             <Grid container>
               {/* <Grid item xs>
