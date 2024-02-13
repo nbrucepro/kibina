@@ -152,7 +152,7 @@ const Kuguza = () => {
             {/* <Typography variant="h5" sx={{ cursor: 'pointer' }}>
               Add new
             </Typography> */}
-            {loggedInusersm?.role === 4 && <FormDialog monthValue={monthValue} />}
+            {loggedInusersm?.role === 1 && <FormDialog monthValue={monthValue} />}
           </Grid>
           {/* <Grid item /> */}
         </Grid>

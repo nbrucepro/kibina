@@ -42,7 +42,7 @@ const dashboard = {
   ]
 };
 {
-  loggedInusersm?.role === 4 &&
+  loggedInusersm?.role === 1 &&
     dashboard.children.push({
       id: 'users',
       title: 'Members',

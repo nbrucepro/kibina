@@ -49,7 +49,7 @@ const Gutira = () => {
             </TextField>
           </Grid>
           <Grid item>
-            {loggedInusersm?.role === 4 && <FormDialog />}
+            {loggedInusersm?.role === 1 && <FormDialog />}
             {/* <Typography variant="h5" sx={{ cursor: 'pointer' }}>
               Add new
             </Typography> */}
