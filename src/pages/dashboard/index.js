@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 // material-ui
-import { Grid, MenuItem, TextField  } from '@mui/material';
+import { Grid, MenuItem, TextField } from '@mui/material';
 
 // project import
 import OrdersTable from './OrdersTable';
@@ -25,6 +25,8 @@ const Gutira = () => {
   const [value, setValue] = useState('2024');
   // const [slot, setSlot] = useState('week');
 
+  const usersmString = localStorage.getItem('userm');
+  const loggedInusersm = usersmString ? JSON.parse(usersmString) : null;
   return (
     <Grid rowSpacing={4.5} columnSpacing={2.75}>
       <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
@@ -47,7 +49,7 @@ const Gutira = () => {
             </TextField>
           </Grid>
           <Grid item>
-            <FormDialog/>
+            {loggedInusersm?.role === 4 && <FormDialog />}
             {/* <Typography variant="h5" sx={{ cursor: 'pointer' }}>
               Add new
             </Typography> */}

@@ -8,7 +8,7 @@ import OrdersTable from './OrdersTable';
 import MainCard from 'components/MainCard';
 import FormDialog from './oModal';
 import { useDispatch } from 'react-redux';
-import { kuguzaFromfir, setselectedmonth } from 'store/reducers/menu';
+import { kuguzaFromfir, membersFromfir, setselectedmonth } from 'store/reducers/menu';
 import {
   collection,
   // doc,
@@ -30,78 +30,26 @@ const yearStatus = [
     label: '2024'
   }
 ];
-const monthStatus = [
-  {
-    value: 'month1',
-    label: 'Ukwezi 1'
-  },
-  {
-    value: 'month2',
-    label: 'Ukwezi 2'
-  },
-  {
-    value: 'month3',
-    label: 'Ukwezi 3'
-  },
-  {
-    value: 'month4',
-    label: 'Ukwezi 4'
-  },
-  {
-    value: 'month5',
-    label: 'Ukwezi 5'
-  },
-  {
-    value: 'month6',
-    label: 'Ukwezi 6'
-  },
-  {
-    value: 'month7',
-    label: 'Ukwezi 7'
-  },
-  {
-    value: 'month8',
-    label: 'Ukwezi 8'
-  },
-  {
-    value: 'month9',
-    label: 'Ukwezi 9'
-  },
-  {
-    value: 'month10',
-    label: 'Ukwezi 10'
-  },
-  {
-    value: 'month11',
-    label: 'Ukwezi 11'
-  },
-  {
-    value: 'month12',
-    label: 'Ukwezi 12'
-  }
-];
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
-const kuguzaDb = collection(database, 'kuguza');
-const Kuguza = () => {
+const membersDb = collection(database, 'members');
+const Users = () => {
   const [value, setValue] = useState('2024');
   const [monthValue, setmonthValue] = useState('month1');
   // const [slot, setSlot] = useState('week');
   const dispatch = useDispatch();
-  const usersmString = localStorage.getItem('userm');
-  const loggedInusersm = usersmString ? JSON.parse(usersmString) : null;
-  const getKuguza = async () => {
-    const q = loggedInusersm?.role === 0 ? query(kuguzaDb, where('nid', '==', loggedInusersm?.nid)) : query(kuguzaDb);
+  const getMembers = async () => {
+    const q = query(membersDb);
     const ridesSnapshot = await getDocs(q);
     const ridesData = [];
     for (const members of ridesSnapshot?.docs) {
-      ridesData.push({ ...members.data() });
+      ridesData.push({...members.data()});
     }
-    dispatch(kuguzaFromfir(ridesData));
+    dispatch(membersFromfir(ridesData));
   };
   useEffect(() => {
-    getKuguza();
+    getMembers();
   }, []);
   useEffect(() => {
     dispatch(setselectedmonth(monthValue));
@@ -128,31 +76,12 @@ const Kuguza = () => {
                 ))}
               </TextField>
             </Grid>
-            <Grid item>
-              <TextField
-                id="standard-select-currency"
-                size="small"
-                select
-                value={monthValue}
-                onChange={(e) => {
-                  setmonthValue(e.target.value);
-                  // dispatch(setselectedmonth(e.target.value))
-                }}
-                sx={{ '& .MuiInputBase-input': { py: 0.5, fontSize: '0.875rem' } }}
-              >
-                {monthStatus.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
           </Box>
           <Grid item>
             {/* <Typography variant="h5" sx={{ cursor: 'pointer' }}>
               Add new
             </Typography> */}
-            {loggedInusersm?.role === 4 && <FormDialog monthValue={monthValue} />}
+            <FormDialog monthValue={monthValue} />
           </Grid>
           {/* <Grid item /> */}
         </Grid>
@@ -170,4 +99,4 @@ const Kuguza = () => {
   );
 };
 
-export default Kuguza;
+export default Users;

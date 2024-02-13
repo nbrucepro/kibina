@@ -20,14 +20,14 @@ const HeaderContent = () => {
 
       <IconButton
         component={Link}
-        href=""
+        // href=""
         target="_blank"
         disableRipple
         color="secondary"
         title="kibina"
         sx={{ color: 'text.primary', bgcolor: 'grey.100' }}
       >
-        <GithubOutlined />
+        {/* <GithubOutlined /> */}
       </IconButton>
 
       {/* <Notification /> */}

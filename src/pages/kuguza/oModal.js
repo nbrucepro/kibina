@@ -9,13 +9,16 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { CircularProgress, Typography, useMediaQuery } from '../../../node_modules/@mui/material/index';
 import { database } from 'config/direabse.config';
-import { collection,addDoc,  
+import {
+  collection,
+  addDoc,
   doc,
   updateDoc,
-    // getDoc,
-    getDocs,
-    query,
-    where, } from 'firebase/firestore';
+  // getDoc,
+  getDocs,
+  query,
+  where
+} from 'firebase/firestore';
 import { kuguzaFromfir } from 'store/reducers/menu';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@mui/material/styles';
@@ -23,36 +26,47 @@ import { useTheme } from '@mui/material/styles';
 const kuguzaDb = collection(database, 'kuguza');
 function FormDialog() {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState('kamalijohn');
-  
-  const {selectedmonth} = useSelector(state=>state.menu);
-  const {kuguzadata} = useSelector((state) => state.menu);
-  const [monthValue, setmonthValue] = React.useState(selectedmonth);
-  console.log("selectedmonth",monthValue);
-  const dispatch = useDispatch();
-  const getKuguza = async(month)=>{
-    const q = query(kuguzaDb, where("usernames", "==", "John Kamali"),where("month", "==", month));
-    const ridesSnapshot = await getDocs(q);
-    const ridesData = []
-    if(ridesSnapshot?.docs?.length > 0){
-      ridesData.push(ridesSnapshot?.docs[0]?.data())
+  const [value, setValue] = React.useState(null);
+  const [premonth, setpremonth] = React.useState(null);
+  let pre = 0;
+  const { selectedmonth } = useSelector((state) => state.menu);
+  React.useEffect(() => {
+    if (selectedmonth.length > 0) {
+      pre = selectedmonth.match(/\d+$/)[0];
     }
-    console.log(ridesData)
-    dispatch(kuguzaFromfir(ridesData))
-  }
+    if (selectedmonth.match(/\bmonth1\b/)) {
+      setpremonth(null);
+    } else {
+      setpremonth(`month${pre - 1}`);
+    }
+  }, [selectedmonth]);
+  const [loana, setloana] = React.useState(0);
+  const [isthere, setisthere] = React.useState(0);
+  const { kuguzadata } = useSelector((state) => state.menu);
+  const { membersdata } = useSelector((state) => state.menu);
+  const [monthValue, setmonthValue] = React.useState(selectedmonth);
+  const dispatch = useDispatch();
+  const usersmString = localStorage.getItem('userm');
+  const loggedInusersm = usersmString ? JSON.parse(usersmString) : null;
+  const getKuguza = async () => {
+    const q = loggedInusersm?.role === 0 ? query(kuguzaDb, where('nid', '==', loggedInusersm?.nid)) : query(kuguzaDb);
+    const ridesSnapshot = await getDocs(q);
+    const ridesData = [];
+    for (const members of ridesSnapshot?.docs) {
+      ridesData.push({ ...members.data() });
+    }
+    dispatch(kuguzaFromfir(ridesData));
+  };
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
+    setloana(0);
+    setisthere(0);
+    setValue(null);
   };
-  const yearStatus = [
-    {
-      value: 'kamalijohn',
-      label: 'John kamali'
-    }
-  ];
   const monthStatus = [
     {
       value: 'month1',
@@ -103,95 +117,208 @@ function FormDialog() {
       label: 'Ukwezi 12'
     }
   ];
+  function toscapitalize(value) {
+    return value.charAt(0).toUpperCase() + value.slice(1);
+  }
+  const [loading, setLoading] = React.useState(false);
+  const [usersm, setUsersm] = React.useState([]);
+  React.useEffect(() => {
+    const mm = [];
+    if (membersdata?.length > 0) {
+      for (const me of membersdata) {
+        mm.push({
+          id: me?.nid,
+          value: me?.nid,
+          label: `${toscapitalize(me?.names)}`
+        });
+      }
+      setUsersm(mm);
+      // setValue(membersdata[0]?.nid || '');
+    }
+  }, [membersdata]);
+  function membersdatafilter(value) {
+    for (const kug of kuguzadata) {
+      if (kug?.nid === value) {
+        if (kug.month2.prevdebt > 0) {
+          setloana(kug.month2.prevdebt);
+          setisthere(kug.month2.prevdebt);
+        } else {
+          setisthere(0);
+          setloana(0);
+        }
+      }
+    }
+  }
 
-  const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('lg'));
-  console.log(fullScreen)
-  const [loading,setLoading] = React.useState(false);
+  const onloanachange = (e) => {
+    setloana(parseInt(e.target.value));
+  };
+  console.log('value', value);
   return (
     <React.Fragment>
       <Button variant="outlined" onClick={handleClickOpen}>
-        Guza
+        {/* {(premonth && kuguzadata[0][premonth].debt)>0 ? "Ishyura ideni": "Guza"} */} Guza
       </Button>
       <Dialog
-    open={open}
-    onClose={handleClose}
-    // fullScreen={true}
-    PaperProps={{
-        component: 'form',
-        onSubmit: async (event) => {
+        open={open}
+        onClose={handleClose}
+        // fullScreen={true}
+        PaperProps={{
+          component: 'form',
+          onSubmit: async (event) => {
             event.preventDefault();
-            setLoading(true)
+            setLoading(true);
             const formData = new FormData(event.currentTarget);
             const formJson = Object.fromEntries(formData.entries());
-            const loan = parseInt(formJson.loan);
+            const loan = loana;
             const paid = parseInt(formJson.paid);
-            // const debt = loan - paid
-            // const month = formJson.month;
+            // const debt = loan - paiD
+            const month = formJson.month;
 
             // Query Firestore to get the document
-            const querySnapshot = await getDocs(query(kuguzaDb, where("usernames", "==", "John Kamali"),where("month", "==", selectedmonth)));
-          //   await updateDoc(doc(kuguzaDb, docSnapshot.id), {
-          //     [month]: amount,
-          //     total: total + amount
-          // });
-          if (!querySnapshot.empty) {
-            const docSnapshot = querySnapshot.docs[0];
-            const alreadpaid = docSnapshot.data().paid + paid;
-            const debt = Math.round((docSnapshot?.data()?.loanwithintereset - paid));
-            console.log("debt",debt);
-            const interest = Math.round((debt * 3)/100);
-            const loanwithintereset =Math.round(interest + debt);
-            console.log(interest + debt);
-                await updateDoc(doc(kuguzaDb, docSnapshot.id), {
-                  loan:docSnapshot?.data()?.loan,
-                  interest,
-                  loanwithintereset,
-                  paid:alreadpaid,
-                  debt
-                });
-                getKuguza(selectedmonth);
-            } else {
-              await addDoc(kuguzaDb,{
-                usernames:"John Kamali",
-                year:2014,
-                month:selectedmonth,
-                loan,
-                interest:(loan * 3)/100,
-                loanwithintereset:(loan + (loan * 3)/100),
-                paid,
-                debt:((loan + ((loan * 3)/100)) - paid)
-              })
-              getKuguza(selectedmonth);
-            }
-            setLoading(false)
-            handleClose(); // Close the dialog
-        }
-    }}
->
+            const querySnapshot = await getDocs(query(kuguzaDb, where('nid', '==', value)));
+            const querySnapshotWithdept = await getDocs(query(kuguzaDb, where('nid', '==', value), where('sharedebt', '>', 0)));
 
-        <DialogTitle sx={{ my: 0.5, fontSize: '1.875rem' }}>Kuguza</DialogTitle>
-        <DialogContent sx={{width:"700px"}}>
+            if (querySnapshot.empty) {
+              const ind = 12;
+              const iterableArray = Array.from({ length: ind }, (_, index) => index + 1);
+              const data = {
+                year: 2024,
+                nid: value,
+                sharedebt: 0
+              };
+
+              iterableArray.forEach((id) => {
+                data[`month${id}`] = {
+                  loan: 0,
+                  interest: 0,
+                  loanwithintereset: 0,
+                  paid: 0,
+                  debt: 0,
+                  prevdebt: 0
+                };
+              });
+              await addDoc(kuguzaDb, data);
+              getKuguza(selectedmonth);
+            } else {
+              if (!querySnapshotWithdept.empty) {
+                const docSnapshot = querySnapshot.docs[0];
+                // const debtmonth = querySnapshot.docs[0].month;
+                const sharedebtM = `month${docSnapshot.data()?.sharedebt}`;
+                const docDataPrevMonth = docSnapshot.data()[sharedebtM];
+                const alreadpaid = docDataPrevMonth.paid + paid;
+                const debt = docDataPrevMonth?.loanwithintereset !== 0 ? docDataPrevMonth?.loanwithintereset - paid : loan;
+                const interest = (debt * 3) / 100;
+                const loanwithintereset = interest + debt;
+                const theextras = loanwithintereset < 0 ? Math.abs(loanwithintereset) : 0;
+                const ind = 12;
+                const iterableArray = Array.from({ length: ind }, (_, index) => index + 1);
+                const sharedebt = debt === 0 ? parseInt(0) : docSnapshot.data()?.sharedebt;
+                const data = { sharedebt };
+                iterableArray.forEach((id) => {
+                  if (`month${id}` === sharedebtM) {
+                    data[`${sharedebtM}`] = {
+                      loan: loan ? Math.round(loan) : docDataPrevMonth?.loan,
+                      interest: theextras == 0 ? Math.round(interest) : 0,
+                      loanwithintereset: Math.round(loanwithintereset),
+                      paid: Math.round(alreadpaid),
+                      debt: Math.round(debt),
+                      prevdebt: Math.round(loanwithintereset),
+                      theextras
+                    };
+                  } else {
+                    data[`month${id}`] = {
+                      loan: docSnapshot.data()[`month${id}`]?.loan,
+                      interest: docSnapshot.data()[`month${id}`]?.interest,
+                      loanwithintereset: docSnapshot.data()[`month${id}`]?.loanwithintereset,
+                      paid: docSnapshot.data()[`month${id}`]?.paid,
+                      debt: docSnapshot.data()[`month${id}`]?.debt,
+                      prevdebt: loanwithintereset
+                    };
+                  }
+                });
+                await updateDoc(doc(kuguzaDb, docSnapshot.id), data);
+                getKuguza(selectedmonth);
+              } else {
+                const ind = 12;
+                const iterableArray = Array.from({ length: ind }, (_, index) => index + 1);
+
+                const docSnapshot = querySnapshot.docs[0];
+                const docDataPrevMonth = selectedmonth === 'month1' ? docSnapshot.data()[selectedmonth] : docSnapshot.data()[selectedmonth];
+                const alreadpaid = paid ? docDataPrevMonth.paid + paid : docDataPrevMonth.paid;
+                const debt = docDataPrevMonth?.loanwithintereset !== 0 ? docDataPrevMonth?.loanwithintereset - paid : loan;
+                const interest = (debt * 3) / 100;
+                const loanwithintereset = interest + debt;
+                const sharedebt = parseInt(selectedmonth.match(/\d+$/)[0]);
+                const data = { sharedebt };
+                iterableArray.forEach((id) => {
+                  if (`month${id}` === selectedmonth) {
+                    data[`${selectedmonth}`] = {
+                      loan: loan ? Math.round(loan) : docDataPrevMonth?.loan,
+                      interest: Math.round(interest),
+                      loanwithintereset: Math.round(loanwithintereset),
+                      paid: Math.round(alreadpaid),
+                      debt: Math.round(debt),
+                      prevdebt: Math.round(loanwithintereset)
+                    };
+                  } else {
+                    data[`month${id}`] = {
+                      loan: docSnapshot.data()[`month${id}`]?.loan,
+                      interest: docSnapshot.data()[`month${id}`]?.interest,
+                      loanwithintereset: docSnapshot.data()[`month${id}`]?.loanwithintereset,
+                      paid: docSnapshot.data()[`month${id}`]?.paid,
+                      debt: docSnapshot.data()[`month${id}`]?.debt,
+                      prevdebt: loanwithintereset
+                    };
+                  }
+                });
+                await updateDoc(doc(kuguzaDb, docSnapshot.id), data);
+                getKuguza(selectedmonth);
+              }
+            }
+            setLoading(false);
+            handleClose(); // Close the dialog
+          }
+        }}
+      >
+        <DialogTitle sx={{ my: 0.5, fontSize: '1.875rem' }}>{kuguzadata.length > 0 && loana > 0 ? 'Ishyura ideni' : 'Kuguza'}</DialogTitle>
+        {/* <DialogTitle sx={{ my: 0.5, fontSize: '1.875rem' }}>Kuguza</DialogTitle> */}
+        <DialogContent sx={{ width: '700px' }}>
           <Typography>Amazina</Typography>
           <TextField
             id="standard-select-currency"
-            //   size="small"
             fullWidth
             select
+            // value={value === null ? ' <em style={{color:"gray"}}>Select an option</em>' : value}
             value={value}
-            onChange={(e) => setValue(e.target.value)}
+            onChange={(e) => {
+              console.log('e.target.value', e.target.value);
+              setValue(e.target.value);
+              membersdatafilter(e.target.value);
+            }}
+            SelectProps={{
+              displayEmpty: true,
+              renderValue: (selected) => {
+                if (!selected) {
+                  return <em style={{ color: 'gray' }}>Select an option</em>;
+                }
+                const selectedOption = usersm.find((option) => option.value === selected);
+                return selectedOption ? selectedOption.label : '';
+              }
+            }}
             sx={{ '& .MuiInputBase-input': { py: 0.5, fontSize: '0.875rem' } }}
           >
-            {yearStatus.map((option) => (
+            {/* Other MenuItems */}
+            {usersm.map((option) => (
               <MenuItem key={option.value} value={option.value}>
                 {option.label}
               </MenuItem>
             ))}
           </TextField>
-          <Typography sx={{mt:2}}>Ukwezi</Typography>
+
+          <Typography sx={{ mt: 2 }}>Ukwezi</Typography>
           <TextField
             id="standard-select-currency"
-            //   size="small"
             name="month"
             fullWidth
             select
@@ -206,16 +333,54 @@ function FormDialog() {
               </MenuItem>
             ))}
           </TextField>
-
-          <TextField disabled={kuguzadata[0]?.loan > 0} defaultValue={kuguzadata[0]?.loan} autoFocus required margin="dense" id="name" name="loan" label="Umubare w' ayagujijwe" type="number" fullWidth variant="standard" />
-          <TextField autoFocus required margin="dense" defaultValue={0} id="name" name="paid" label="Umubare w' ayishyuwe" type="number" fullWidth variant="standard" />
+          {/* {(selectedmonth && kuguzadata.length > 0) && (
+            <> */}
+          {/* {kuguzadata.length} */}
+          {/* {(selectedmonth && kuguzadata.length > 0 ) && (
+              <TextField disabled={kuguzadata[0][selectedmonth]?.prevdebt > 0} defaultValue={kuguzadata[0][selectedmonth]?.prevdebt} autoFocus label="Ideni arimo" type="number" fullWidth variant="standard" />
+            )}   */}
+          {/* </>
+            )}   */}
+          {kuguzadata.length > 0 && (
+            <TextField
+              value={loana}
+              disabled={isthere > 0}
+              autoFocus
+              required
+              margin="dense"
+              id="name"
+              label="Umubare w'ayagujijwe"
+              type="number"
+              fullWidth
+              variant="standard"
+              onChange={onloanachange}
+            />
+          )}
+          {/* {(kuguzadata[0][selectedmonth]?.prevdebt > 0) && ( */}
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            defaultValue={0}
+            id="name"
+            name="paid"
+            label="Umubare w' ayishyuwe"
+            type="number"
+            fullWidth
+            variant="standard"
+          />
+          {/* // )} */}
+          {/* </> */}
+          {/* // )} */}
         </DialogContent>
-        <DialogActions sx={{mx:"auto",my:3}}>
-          {loading ? <CircularProgress /> : (
+        <DialogActions sx={{ mx: 'auto', my: 3 }}>
+          {loading ? (
+            <CircularProgress />
+          ) : (
             <>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Save</Button>
-          </>
+              <Button onClick={handleClose}>Cancel</Button>
+              <Button type="submit">Save</Button>
+            </>
           )}
         </DialogActions>
       </Dialog>

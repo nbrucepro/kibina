@@ -10,6 +10,7 @@ import HeaderContent from './HeaderContent';
 
 // assets
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
+import { Box } from '../../../../node_modules/@mui/material/index';
 
 // ==============================|| MAIN LAYOUT - HEADER ||============================== //
 
@@ -17,10 +18,10 @@ const Header = ({ open, handleDrawerToggle }) => {
   const theme = useTheme();
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
 
-  const iconBackColor = 'grey.100';
-  const iconBackColorOpen = 'grey.200';
+  const iconBackColor = 'blue.300';
+  const iconBackColorOpen = 'blue.300';
 
-  // common header
+  // common header  sx={{backgroundColor:"darkblue",color:"white"}}
   const mainHeader = (
     <Toolbar>
       <IconButton
@@ -29,7 +30,8 @@ const Header = ({ open, handleDrawerToggle }) => {
         onClick={handleDrawerToggle}
         edge="start"
         color="secondary"
-        sx={{ color: 'text.primary', bgcolor: open ? iconBackColorOpen : iconBackColor, ml: { xs: 0, lg: -2 } }}
+        sx={{ color: 'white', bgcolor: open ? iconBackColorOpen : iconBackColor, ml: { xs: 0, lg: -2 } }}
+        // sx={{ color: 'text.primary', bgcolor: open ? iconBackColorOpen : iconBackColor, ml: { xs: 0, lg: -2 } }}
       >
         {!open ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
       </IconButton>
@@ -49,7 +51,7 @@ const Header = ({ open, handleDrawerToggle }) => {
   };
 
   return (
-    <>
+    <div style={{backgroundColor:"red"}}>
       {!matchDownMD ? (
         <AppBarStyled open={open} {...appBar}>
           {mainHeader}
@@ -57,7 +59,7 @@ const Header = ({ open, handleDrawerToggle }) => {
       ) : (
         <AppBar {...appBar}>{mainHeader}</AppBar>
       )}
-    </>
+    </div>
   );
 };
 

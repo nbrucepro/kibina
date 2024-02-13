@@ -9,12 +9,14 @@ import MainCard from 'components/MainCard';
 import FormDialog from './oModal';
 import { useDispatch } from 'react-redux';
 import { gutiraFromfir, setselectedmonth } from 'store/reducers/menu';
-import { collection,  
+import {
+  collection,
   // doc,
-    // getDoc,
-    getDocs,
-    query,
-    where, } from 'firebase/firestore';
+  // getDoc,
+  getDocs,
+  query,
+  where
+} from 'firebase/firestore';
 import { database } from 'config/direabse.config';
 
 // import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
@@ -81,27 +83,29 @@ const monthStatus = [
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
-
 const gutiraDb = collection(database, 'gutira');
 const Gutira = () => {
   const [value, setValue] = useState('2024');
   const [monthValue, setmonthValue] = useState('month1');
   // const [slot, setSlot] = useState('week');
-  const dispatch =useDispatch()
-  const getgutira = async()=>{
-    const q = query(gutiraDb, where("usernames", "==", "John Kamali"),where("month", "==", monthValue));
+  const dispatch = useDispatch();
+  const usersmString = localStorage.getItem('userm');
+  const loggedInusersm = usersmString ? JSON.parse(usersmString) : null;
+  const getgutira = async (month) => {
+    const q = loggedInusersm?.role === 0 ? query(gutiraDb, where('nid', '==', loggedInusersm?.nid)) : query(gutiraDb);
     const ridesSnapshot = await getDocs(q);
-    const ridesData = []
-    if(ridesSnapshot?.docs?.length > 0){
-      ridesData.push(ridesSnapshot?.docs[0]?.data())
+    const ridesData = [];
+    for (const members of ridesSnapshot?.docs) {
+      ridesData.push({ ...members.data() });
     }
-    console.log(ridesData)
-    dispatch(gutiraFromfir(ridesData))
-  }
-  useEffect(()=>{
-    dispatch(setselectedmonth(monthValue))
-    getgutira()
-  },[ monthValue ])
+    dispatch(gutiraFromfir(ridesData));
+  };
+  useEffect(() => {
+    getgutira();
+  }, []);
+  useEffect(() => {
+    dispatch(setselectedmonth(monthValue));
+  }, [monthValue]);
   return (
     <Grid rowSpacing={4.5} columnSpacing={2.75}>
       <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
@@ -131,7 +135,7 @@ const Gutira = () => {
                 select
                 value={monthValue}
                 onChange={(e) => {
-                  setmonthValue(e.target.value)
+                  setmonthValue(e.target.value);
                   // dispatch(setselectedmonth(e.target.value))
                 }}
                 sx={{ '& .MuiInputBase-input': { py: 0.5, fontSize: '0.875rem' } }}
@@ -148,7 +152,7 @@ const Gutira = () => {
             {/* <Typography variant="h5" sx={{ cursor: 'pointer' }}>
               Add new
             </Typography> */}
-            <FormDialog monthValue={monthValue}/>
+            {loggedInusersm?.role === 4 && <FormDialog monthValue={monthValue} />}
           </Grid>
           {/* <Grid item /> */}
         </Grid>

@@ -8,13 +8,16 @@ import { Box, Link, Table, TableBody, TableCell, TableContainer, TableHead, Tabl
 // third-party
 import NumberFormat from 'react-number-format';
 import { database } from 'config/direabse.config';
-import { collection,
-    // getDoc,
-    getDocs,
-    query,
-    where, } from 'firebase/firestore';
+import {
+  collection,
+  // getDoc,
+  getDocs,
+  query,
+  where
+} from 'firebase/firestore';
 import { useDispatch, useSelector } from 'react-redux';
 import { guturaFromfir } from 'store/reducers/menu';
+import { CircularProgress } from '../../../node_modules/@mui/material/index';
 
 const guturaDb = collection(database, 'gutura');
 
@@ -189,32 +192,46 @@ export default function OrderTable() {
   const [order] = useState('asc');
   const [orderBy] = useState('amazina');
   const [selected] = useState([]);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const isSelected = (trackingNo) => selected.indexOf(trackingNo) !== -1;
-  const getGutura = async()=>{
-    const q = query(guturaDb, where("usernames", "==", "John Kamali"));
+  const usersmString = localStorage.getItem('userm');
+  const loggedInusersm = usersmString ? JSON.parse(usersmString) : null;
+  const getGutura = async () => {
+    const q = loggedInusersm?.role === 0 ? query(guturaDb, where('nid', '==', loggedInusersm?.nid)) : query(guturaDb);
     const ridesSnapshot = await getDocs(q);
-    const ridesData = []
-    if(ridesSnapshot?.docs?.length > 0){
-      ridesData.push(ridesSnapshot?.docs[0]?.data())
+    const ridesData = [];
+    for (const members of ridesSnapshot?.docs) {
+      ridesData.push({ ...members.data() });
     }
-    // console.log(ridesData)
-    dispatch(guturaFromfir(ridesData))
-  }
-useEffect(()=>{
-  getGutura()
-  // retudata()
-},[])
-const {guturadata} = useSelector((state) => state.menu);
-console.log(guturadata)
-// let rows1 = []
-// const retudata = () => {
-//   if (Array.isArray(guturaDb)) {
-//     rows1 = guturaDb.map(data => createData(data?.usernames,data?.month1,data?.month2,data?.month3,data?.month4,data?.month5));
-//   }
-// };
+    dispatch(guturaFromfir(ridesData));
+  };
+  useEffect(() => {
+    getGutura();
+    // retudata()
+  }, []);
+  const { guturadata } = useSelector((state) => state.menu);
+  const [members, setMembers] = useState([]);
+  const membersDb = collection(database, 'members');
+  const getmebers = async () => {
+    const q = query(membersDb);
+    const ridesSnapshot = await getDocs(q);
+    const ridesData = [];
+    for (const members of ridesSnapshot?.docs) {
+      ridesData.push({ ...members.data() });
+    }
+    setMembers(ridesData);
+  };
+  useEffect(() => {
+    getmebers();
+  }, []);
 
-// const rows1 = [createData('John kamali', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)];
+  function searchNameOrId(targetValue) {
+    for (let i = 0; i < members.length; i++) {
+      if (members[i].nid === targetValue) {
+        return members[i].names;
+      }
+    }
+  }
   return (
     <Box>
       <TableContainer
@@ -239,70 +256,80 @@ console.log(guturadata)
           }}
         >
           <OrderTableHead order={order} orderBy={orderBy} />
-          <TableBody>
-            {guturadata.map((row, index) => {
-            // {stableSort(guturadata, getComparator(order, orderBy)).map((row, index) => {
-              const isItemSelected = isSelected(row.trackingNo);
-              const labelId = `enhanced-table-checkbox-${index}`;
+          {members?.length > 0 ? (
+            <TableBody>
+              {guturadata.map((row, index) => {
+                // {stableSort(guturadata, getComparator(order, orderBy)).map((row, index) => {
+                const isItemSelected = isSelected(row.trackingNo);
+                const labelId = `enhanced-table-checkbox-${index}`;
 
-              return (
-                <TableRow
-                  hover
-                  role="checkbox"
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  aria-checked={isItemSelected}
-                  tabIndex={-1}
-                  key={row.usernames}
-                  selected={isItemSelected}
-                >
-                  <TableCell component="th" id={labelId} scope="row" align="left">
-                    <Link color="secondary" component={RouterLink} to="">
-                      {row.usernames}
-                    </Link>
-                  </TableCell>
-                  <TableCell align="left">
-                    <NumberFormat value={row.month1} displayType="text" thousandSeparator prefix="Frw " />
-                  </TableCell>
-                  <TableCell align="left">
-                    <NumberFormat value={row.month2} displayType="text" thousandSeparator prefix="Frw " />
-                  </TableCell>
-                  <TableCell align="left">
-                    <NumberFormat value={row.month3} displayType="text" thousandSeparator prefix="Frw " />
-                  </TableCell>
-                  <TableCell align="left">
-                    <NumberFormat value={row.month4} displayType="text" thousandSeparator prefix="Frw " />
-                  </TableCell>
-                  <TableCell align="left">
-                    <NumberFormat value={row.month5} displayType="text" thousandSeparator prefix="Frw " />
-                  </TableCell>
-                  <TableCell align="left">
-                    <NumberFormat value={row.month6} displayType="text" thousandSeparator prefix="Frw " />
-                  </TableCell>
-                  <TableCell align="left">
-                    <NumberFormat value={row.month7} displayType="text" thousandSeparator prefix="Frw " />
-                  </TableCell>
-                  <TableCell align="left">
-                    <NumberFormat value={row.month8} displayType="text" thousandSeparator prefix="Frw " />
-                  </TableCell>
-                  <TableCell align="left">
-                    <NumberFormat value={row.month9} displayType="text" thousandSeparator prefix="Frw " />
-                  </TableCell>
-                  <TableCell align="left">
-                    <NumberFormat value={row.month10} displayType="text" thousandSeparator prefix="Frw " />
-                  </TableCell>
-                  <TableCell align="left">
-                    <NumberFormat value={row.month11} displayType="text" thousandSeparator prefix="Frw " />
-                  </TableCell>
-                  <TableCell align="left">
-                    <NumberFormat value={row.month12} displayType="text" thousandSeparator prefix="Frw " />
-                  </TableCell>
-                  <TableCell align="right">
-                    <NumberFormat value={row.total} displayType="text" thousandSeparator prefix="Frw " />
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
+                return (
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={row?.nid}
+                    selected={isItemSelected}
+                  >
+                    <TableCell component="th" id={labelId} scope="row" align="left">
+                      <Link color="secondary" component={RouterLink} to="">
+                        {searchNameOrId(row?.nid)?.charAt(0).toUpperCase() + searchNameOrId(row?.nid).slice(1)}
+                      </Link>
+                    </TableCell>
+                    <TableCell align="left">
+                      <NumberFormat value={row.month1} displayType="text" thousandSeparator prefix="Frw " />
+                    </TableCell>
+                    <TableCell align="left">
+                      <NumberFormat value={row.month2} displayType="text" thousandSeparator prefix="Frw " />
+                    </TableCell>
+                    <TableCell align="left">
+                      <NumberFormat value={row.month3} displayType="text" thousandSeparator prefix="Frw " />
+                    </TableCell>
+                    <TableCell align="left">
+                      <NumberFormat value={row.month4} displayType="text" thousandSeparator prefix="Frw " />
+                    </TableCell>
+                    <TableCell align="left">
+                      <NumberFormat value={row.month5} displayType="text" thousandSeparator prefix="Frw " />
+                    </TableCell>
+                    <TableCell align="left">
+                      <NumberFormat value={row.month6} displayType="text" thousandSeparator prefix="Frw " />
+                    </TableCell>
+                    <TableCell align="left">
+                      <NumberFormat value={row.month7} displayType="text" thousandSeparator prefix="Frw " />
+                    </TableCell>
+                    <TableCell align="left">
+                      <NumberFormat value={row.month8} displayType="text" thousandSeparator prefix="Frw " />
+                    </TableCell>
+                    <TableCell align="left">
+                      <NumberFormat value={row.month9} displayType="text" thousandSeparator prefix="Frw " />
+                    </TableCell>
+                    <TableCell align="left">
+                      <NumberFormat value={row.month10} displayType="text" thousandSeparator prefix="Frw " />
+                    </TableCell>
+                    <TableCell align="left">
+                      <NumberFormat value={row.month11} displayType="text" thousandSeparator prefix="Frw " />
+                    </TableCell>
+                    <TableCell align="left">
+                      <NumberFormat value={row.month12} displayType="text" thousandSeparator prefix="Frw " />
+                    </TableCell>
+                    <TableCell align="right">
+                      <NumberFormat value={row.total} displayType="text" thousandSeparator prefix="Frw " />
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          ) : (
+            <TableRow>
+              <TableCell align="center" colSpan={14}>
+                {' '}
+                {/* Adjust the colspan according to your table structure */}
+                <CircularProgress />
+              </TableCell>
+            </TableRow>
+          )}
         </Table>
       </TableContainer>
     </Box>

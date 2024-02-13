@@ -11,7 +11,11 @@ const initialState = {
   guturadata:[],
   kuguzadata:[],
   gutiradata:[],
-  selectedmonth:""
+  membersdata:[],
+  selectedmonth:"",
+  modals:{
+    li: false
+  }
 };
 
 // ==============================|| SLICE - MENU ||============================== //
@@ -44,12 +48,20 @@ const menu = createSlice({
     gutiraFromfir(state,action){
       state.gutiradata = action.payload
     },
+    membersFromfir(state,action){
+      state.membersdata = action.payload
+    },
     setselectedmonth(state,action){
       state.selectedmonth = action.payload
-    }
+    },
+    toggleModals: (state, action) => {
+      state.modals = action.payload;
+    },
   }
 });
 
 export default menu.reducer;
 
-export const {setselectedmonth, activeItem, activeComponent, openDrawer, openComponentDrawer,guturaFromfir,kuguzaFromfir,gutiraFromfir } = menu.actions;
+export const {setselectedmonth, activeItem, activeComponent, 
+  openDrawer, openComponentDrawer,guturaFromfir,kuguzaFromfir,
+  gutiraFromfir,membersFromfir,toggleModals } = menu.actions;

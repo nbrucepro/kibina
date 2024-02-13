@@ -9,31 +9,37 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { CircularProgress, Typography, useMediaQuery } from '../../../node_modules/@mui/material/index';
 import { database } from 'config/direabse.config';
-import { collection,updateDoc,  doc,
-    // getDoc,
-    getDocs,
-    query,
-    where, } from 'firebase/firestore';
+import {
+  collection,
+  updateDoc,
+  doc,
+  // getDoc,
+  getDocs,
+  query,
+  where
+} from 'firebase/firestore';
 import { guturaFromfir } from 'store/reducers/menu';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@mui/material/styles';
 
 const guturaDb = collection(database, 'gutura');
 function FormDialog() {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState('kamalijohn');
+  const [value, setValue] = React.useState();
+  const [idTouse, setidTouse] = React.useState();
   const [monthValue, setmonthValue] = React.useState('month1');
   const dispatch = useDispatch();
-  const getGutura = async()=>{
-    const q = query(guturaDb, where("usernames", "==", "John Kamali"));
+  const usersmString = localStorage.getItem('userm');
+  const loggedInusersm = usersmString ? JSON.parse(usersmString) : null;
+  const getGutura = async () => {
+    const q = loggedInusersm?.role === 0 ? query(guturaDb, where('nid', '==', loggedInusersm?.nid)) : query(guturaDb);
     const ridesSnapshot = await getDocs(q);
-    const ridesData = []
-    if(ridesSnapshot?.docs?.length > 0){
-      ridesData.push(ridesSnapshot?.docs[0]?.data())
+    const ridesData = [];
+    for (const members of ridesSnapshot?.docs) {
+      ridesData.push({ ...members.data() });
     }
-    // console.log(ridesData)
-    dispatch(guturaFromfir(ridesData))
-  }
+    dispatch(guturaFromfir(ridesData));
+  };
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -41,12 +47,10 @@ function FormDialog() {
   const handleClose = () => {
     setOpen(false);
   };
-  const yearStatus = [
-    {
-      value: 'kamalijohn',
-      label: 'John kamali'
-    }
-  ];
+  function toscapitalize(value) {
+    return value.charAt(0).toUpperCase() + value.slice(1);
+  }
+  const [usersm, setUsersm] = React.useState([]);
   const monthStatus = [
     {
       value: 'month1',
@@ -98,75 +102,87 @@ function FormDialog() {
     }
   ];
 
-  const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('lg'));
-  console.log(fullScreen)
-  const [loading,setLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+
+  const { membersdata } = useSelector((state) => state.menu);
+  React.useEffect(() => {
+    const mm = [];
+    if (membersdata?.length > 0) {
+      for (const me of membersdata) {
+        console.log(me?.nid);
+        mm.push({
+          id: me?.nid,
+          value: me?.nid,
+          label: `${toscapitalize(me?.names)}`
+        });
+      }
+      setUsersm(mm);
+      setValue(membersdata[0]?.nid || '');
+    }
+  }, [membersdata]);
   return (
     <React.Fragment>
       <Button variant="outlined" onClick={handleClickOpen}>
-        Add new
+        Tura
       </Button>
       <Dialog
-    open={open}
-    onClose={handleClose}
-    // fullScreen={true}
-    PaperProps={{
-        component: 'form',
-        onSubmit: async (event) => {
+        open={open}
+        onClose={handleClose}
+        // fullScreen={true}
+        PaperProps={{
+          component: 'form',
+          onSubmit: async (event) => {
             event.preventDefault();
-            setLoading(true)
+            setLoading(true);
             const formData = new FormData(event.currentTarget);
             const formJson = Object.fromEntries(formData.entries());
             const amount = parseInt(formJson.amount);
             const month = formJson.month;
 
             // Query Firestore to get the document
-            const querySnapshot = await getDocs(query(guturaDb, where("usernames", "==", "John Kamali")));
+            const querySnapshot = await getDocs(query(guturaDb, where('nid', '==', value)));
 
             if (!querySnapshot.empty) {
-                const docSnapshot = querySnapshot.docs[0];
-                const docData = docSnapshot.data();
-                let total = docData.total || 0;
-                if (docData[month] !== 0) {
-                    total -= docData[month];
-                }
-                await updateDoc(doc(guturaDb, docSnapshot.id), {
-                    [month]: amount,
-                    total: total + amount
-                });
-                getGutura();
+              const docSnapshot = querySnapshot.docs[0];
+              const docData = docSnapshot.data();
+              let total = docData.total || 0;
+              if (docData[month] !== 0) {
+                total -= docData[month];
+              }
+              await updateDoc(doc(guturaDb, docSnapshot.id), {
+                [month]: amount,
+                total: total + amount
+              });
+              getGutura();
             } else {
-                console.error("No document found for 'John Kamali'");
+              console.error("No document found for 'John Kamali'");
             }
-            setLoading(false)
+            setLoading(false);
             handleClose(); // Close the dialog
-        }
-    }}
->
-
+          }
+        }}
+      >
         <DialogTitle sx={{ my: 0.5, fontSize: '1.875rem' }}>Gutura</DialogTitle>
-        <DialogContent sx={{width:"700px"}}>
+        <DialogContent sx={{ width: '700px' }}>
           <Typography>Amazina</Typography>
           <TextField
             id="standard-select-currency"
-            //   size="small"
             fullWidth
             select
             value={value}
             onChange={(e) => setValue(e.target.value)}
             sx={{ '& .MuiInputBase-input': { py: 0.5, fontSize: '0.875rem' } }}
           >
-            {yearStatus.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
+            {usersm?.map((option) => (
+              <MenuItem key={option?.value} value={option?.value}>
+                {option?.label}
               </MenuItem>
             ))}
           </TextField>
-          <Typography sx={{mt:2}}>Ukwezi</Typography>
+          {/* //   size="small" */}
+          <Typography sx={{ mt: 2 }}>Ukwezi</Typography>
           <TextField
             id="standard-select-currency"
-            //   size="small"
             name="month"
             fullWidth
             select
@@ -183,12 +199,14 @@ function FormDialog() {
 
           <TextField autoFocus required margin="dense" id="name" name="amount" label="Amount" type="number" fullWidth variant="standard" />
         </DialogContent>
-        <DialogActions sx={{mx:"auto",my:3}}>
-          {loading ? <CircularProgress /> : (
+        <DialogActions sx={{ mx: 'auto', my: 3 }}>
+          {loading ? (
+            <CircularProgress />
+          ) : (
             <>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Save</Button>
-          </>
+              <Button onClick={handleClose}>Cancel</Button>
+              <Button type="submit">Save</Button>
+            </>
           )}
         </DialogActions>
       </Dialog>
