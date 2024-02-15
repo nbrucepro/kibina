@@ -157,7 +157,7 @@ function FormDialog() {
   return (
     <React.Fragment>
       <Button variant="outlined" onClick={handleClickOpen}>
-        {/* {(premonth && gutiradata[0][premonth].debt)>0 ? "Ishyura ideni": "Guza"} */} Guza
+        {/* {(premonth && gutiradata[0][premonth].debt)>0 ? "Ishyura ideni": "Guza"} */} Tira
       </Button>
       <Dialog
         open={open}

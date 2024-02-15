@@ -43,7 +43,7 @@ const MobileSection = () => {
 
   return (
     <>
-      <Box sx={{ flexShrink: 0, ml: 0.75 }}>
+      {/* <Box sx={{ flexShrink: 0, ml: 0.75 }}>
         <IconButton
           component="span"
           disableRipple
@@ -58,7 +58,8 @@ const MobileSection = () => {
         >
           <MoreOutlined />
         </IconButton>
-      </Box>
+      </Box> */}
+      <Profile />
       <Popper
         placement="bottom-end"
         open={open}

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
 // material-ui
-import { Box, Link, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Box, Link, Table, TableFooter, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 
 // third-party
 import NumberFormat from 'react-number-format';
@@ -162,7 +162,7 @@ const headCells = [
 
 function OrderTableHead({ order, orderBy }) {
   return (
-    <TableHead>
+    <TableHead sx={{backgroundColor:"#f0f0f0"}}>
       <TableRow>
         {headCells.map((headCell) => (
           <TableCell
@@ -232,6 +232,12 @@ export default function OrderTable() {
       }
     }
   }
+  const arrayOfArrays = [];
+
+  // Loop to create 12 empty arrays
+  for (let i = 0; i <= 12; i++) {
+    arrayOfArrays.push([]);
+  }
   return (
     <Box>
       <TableContainer
@@ -263,6 +269,19 @@ export default function OrderTable() {
                 const isItemSelected = isSelected(row.trackingNo);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
+                arrayOfArrays[0].push(row.month1);
+                arrayOfArrays[1].push(row.month2);
+                arrayOfArrays[2].push(row.month3);
+                arrayOfArrays[3].push(row.month4);
+                arrayOfArrays[4].push(row.month5);
+                arrayOfArrays[5].push(row.month6);
+                arrayOfArrays[6].push(row.month7);
+                arrayOfArrays[7].push(row.month8);
+                arrayOfArrays[8].push(row.month9);
+                arrayOfArrays[9].push(row.month10);
+                arrayOfArrays[10].push(row.month11);
+                arrayOfArrays[11].push(row.month12);
+                arrayOfArrays[12].push(row.total);
                 return (
                   <TableRow
                     hover
@@ -320,6 +339,31 @@ export default function OrderTable() {
                   </TableRow>
                 );
               })}
+              {loggedInusersm?.role === 1 && (
+                // <TableHead>
+                <TableRow sx={{backgroundColor:"#f0f0f0"}}>
+                  <TableCell sx={{fontWeight: 'bold'}} component="th" scope="row" align="left">
+                    Yose hamwe
+                  </TableCell>
+                  {arrayOfArrays?.map((arrayItem, index) => (
+                    <TableCell
+                      key={index}
+                      sx={{
+                        fontWeight: 'bold',
+                        textAlign: index === arrayOfArrays.length - 1 ? 'right' : 'left'
+                      }}
+                      align={index === arrayOfArrays.length - 1 ? 'right' : 'left'}
+                    >
+                      <NumberFormat
+                        value={arrayItem.reduce((acc, cur) => acc + cur, 0)}
+                        displayType="text"
+                        thousandSeparator
+                        prefix="Frw "
+                      />
+                    </TableCell>
+                  ))}
+                </TableRow>
+              )}
             </TableBody>
           ) : (
             <TableRow>
