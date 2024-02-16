@@ -1,11 +1,12 @@
 // assets
-import { DashboardOutlined, ChromeOutlined, UserOutlined } from '@ant-design/icons';
+import { DashboardOutlined, ChromeOutlined, UserOutlined,ReadOutlined } from '@ant-design/icons';
 
 // icons
 const icons = {
   DashboardOutlined,
   ChromeOutlined,
-  UserOutlined
+  UserOutlined,
+  ReadOutlined
 };
 
 // ==============================|| MENU ITEMS - DASHBOARD ||============================== //
@@ -22,6 +23,14 @@ const dashboard = {
       title: 'Gutura',
       type: 'item',
       url: '/app/gutura',
+      icon: icons.DashboardOutlined
+      // breadcrumbs: false
+    },
+    {
+      id: 'ingoboka',
+      title: 'Ingoboka',
+      type: 'item',
+      url: '/app/ingoboka',
       icon: icons.DashboardOutlined
       // breadcrumbs: false
     },
@@ -43,12 +52,21 @@ const dashboard = {
 };
 {
   loggedInusersm?.role === 1 &&
-    dashboard.children.push({
-      id: 'users',
-      title: 'Members',
-      type: 'item',
-      url: '/app/members',
-      icon: icons.UserOutlined
-    });
+    dashboard.children.push(
+      {
+        id: 'users',
+        title: 'Members',
+        type: 'item',
+        url: '/app/members',
+        icon: icons.UserOutlined
+      },
+      {
+        id: 'report',
+        title: 'Raport ngufi',
+        type: 'item',
+        url: '/app/shortreport',
+        icon: icons.ReadOutlined
+      }
+    );
 }
 export default dashboard;

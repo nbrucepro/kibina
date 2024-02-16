@@ -24,6 +24,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@mui/material/styles';
 
 const gutiraDb = collection(database, 'gutira');
+const sreportDb = collection(database, 'sreport');
 function FormDialog() {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState(null);
@@ -178,6 +179,7 @@ function FormDialog() {
             // Query Firestore to get the document
             const querySnapshot = await getDocs(query(gutiraDb, where('nid', '==', value)));
             const querySnapshotWithdept = await getDocs(query(gutiraDb, where('nid', '==', value), where('sharedebt', '>', 0)));
+            const querySnapshot2 = await getDocs(query(sreportDb));
 
             if (querySnapshot.empty) {
               const ind = 12;
@@ -208,7 +210,9 @@ function FormDialog() {
                 const docDataPrevMonth = docSnapshot.data()[sharedebtM];
                 const alreadpaid = docDataPrevMonth.paid + paid;
                 const debt = docDataPrevMonth?.loanwithintereset !== 0 ? docDataPrevMonth?.loanwithintereset - paid : loan;
-                const interest = (debt * 5) / 100;
+                const prevsharedebt = parseInt(selectedmonth.match(/\d+$/)[0]);
+                const ubukererwe = prevsharedebt - docSnapshot.data()?.sharedebt >= 2
+                const interest = ubukererwe ? (debt * 7) / 100 :(debt * 5) / 100;
                 const loanwithintereset = interest + debt;
                 const theextras = loanwithintereset < 0 ? Math.abs(loanwithintereset) : 0;
                 const ind = 12;
@@ -238,6 +242,10 @@ function FormDialog() {
                   }
                 });
                 await updateDoc(doc(gutiraDb, docSnapshot.id), data);
+                await updateDoc(doc(sreportDb, querySnapshot2.docs[0].id), {
+                            ayishyuweGutira: querySnapshot2.docs[0].data().ayishyuweGutira+paid,
+                            gutiraDept: ((querySnapshot2.docs[0].data().ayishyuweGutira + paid )- querySnapshot2.docs[0].data().ayatiriweTotal) 
+                          });
                 getgutira(selectedmonth);
               } else {
                 const ind = 12;
@@ -273,6 +281,9 @@ function FormDialog() {
                   }
                 });
                 await updateDoc(doc(gutiraDb, docSnapshot.id), data);
+                await updateDoc(doc(sreportDb, querySnapshot2.docs[0].id), {
+                  ayatiriweTotal: querySnapshot2.docs[0].data().ayatiriweTotal+loan 
+                });
                 getgutira(selectedmonth);
               }
             }
@@ -289,6 +300,7 @@ function FormDialog() {
             id="standard-select-currency"
             fullWidth
             select
+            required
             // value={value === null ? ' <em style={{color:"gray"}}>Select an option</em>' : value}
             value={value}
             onChange={(e) => {

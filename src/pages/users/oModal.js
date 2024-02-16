@@ -27,6 +27,8 @@ const membersDb = collection(database, 'members');
 const kuguzaDb = collection(database, 'kuguza');
 const gutiraDb = collection(database, 'gutira');
 const guturaDb = collection(database, 'gutura');
+const ingobokaDb = collection(database, 'ingoboka');
+const sreportDb = collection(database, 'sreport');
 function FormDialog() {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState('kamalijohn');
@@ -133,7 +135,15 @@ function FormDialog() {
             const cell = formJson.cell;
             const village = formJson.village;
             // Query Firestore to get the document
-            const querySnapshot = await getDocs(query(membersDb, where('nid', '==', parseInt(nidValue)),where('telephone', '==', parseInt(telValue))));
+            const query1 = query(membersDb, where('nid', '==', parseInt(nidValue)));
+            const query2 = query(membersDb, where('telephone', '==', parseInt(telValue)));
+
+            const querySnapshot1 = await getDocs(query1);
+            const querySnapshot2 = await getDocs(query2);
+            const querySnapshot3 = await getDocs(query(sreportDb));
+            // const querySnapshot = await getDocs(query(membersDb, where('nid', '==', parseInt(nidValue)),where('telephone', '==', parseInt(telValue))));
+            // console.log(querySnapshot.empty);
+            console.log(parseInt(telValue));
             if (editmember) {
               const data = {
                 names,
@@ -144,12 +154,12 @@ function FormDialog() {
                 village,
                 role:editData?.role
               };
-              await updateDoc(doc(membersDb, querySnapshot.docs[0].id), data);
+              await updateDoc(doc(membersDb, querySnapshot2.docs[0].id), data);
               getMembers();
               setLoading(false);
               handleClose();
             } else {
-              if (querySnapshot.empty) {
+              if (querySnapshot1.empty && querySnapshot2.empty) {
                 const ind = 12;
                 const iterableArray = Array.from({ length: ind }, (_, index) => index + 1);
                 const guturajson = {
@@ -160,6 +170,15 @@ function FormDialog() {
 
                 iterableArray.forEach((id) => {
                   guturajson[`month${id}`] = 0
+                });
+                const ingobokajson = {
+                  year: 2024,
+                  nid: parseInt(nidValue),
+                  total:0
+                };
+
+                iterableArray.forEach((id) => {
+                  ingobokajson[`month${id}`] = 0
                 });
                 const gutirajson = {
                   year: 2024,
@@ -206,6 +225,16 @@ function FormDialog() {
                 await addDoc(kuguzaDb, kuguzajson);
                 await addDoc(gutiraDb, gutirajson);
                 await addDoc(guturaDb, guturajson);
+                await addDoc(ingobokaDb, ingobokajson);
+                // await addDoc(sreportDb, sreportDbJson);
+                // await updateDoc(doc(sreportDb, querySnapshot3.docs[0].id), {
+                //   guturaTotal: guturaTotal+amount,
+                //   ingobokaTotal:0,
+                //   ayatiriweTotal:0,
+                //   ayagujijweTotal:0,
+                //   ayishyuweKuguza:0,
+                //   ayishyuweGutira:0,
+                // });
                 getMembers();
                 setLoading(false);
                 handleClose();

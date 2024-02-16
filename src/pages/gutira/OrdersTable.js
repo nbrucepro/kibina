@@ -116,7 +116,7 @@ export default function OrderTable() {
       id: 'ukwezi2',
       align: 'left',
       disablePadding: true,
-      label: 'Inyungu 5% izakurikizwa'
+      label: 'Inyungu 5% na 7% izakurikizwa'
     },
     {
       id: 'ukwezi3',

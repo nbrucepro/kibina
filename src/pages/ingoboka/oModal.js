@@ -18,11 +18,11 @@ import {
   query,
   where
 } from 'firebase/firestore';
-import { guturaFromfir } from 'store/reducers/menu';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@mui/material/styles';
+import { ingobokaFromfir } from 'store/reducers/menu';
 
-const guturaDb = collection(database, 'gutura');
+const guturaDb = collection(database, 'ingoboka');
 const sreportDb = collection(database, 'sreport');
 function FormDialog() {
   const [open, setOpen] = React.useState(false);
@@ -39,7 +39,7 @@ function FormDialog() {
     for (const members of ridesSnapshot?.docs) {
       ridesData.push({ ...members.data() });
     }
-    dispatch(guturaFromfir(ridesData));
+    dispatch(ingobokaFromfir(ridesData));
   };
   const handleClickOpen = () => {
     setOpen(true);
@@ -124,7 +124,7 @@ function FormDialog() {
   return (
     <React.Fragment>
       <Button variant="outlined" onClick={handleClickOpen}>
-        Tura
+        Ingoboka
       </Button>
       <Dialog
         open={open}
@@ -175,7 +175,7 @@ function FormDialog() {
           }
         }}
       >
-        <DialogTitle sx={{ my: 0.5, fontSize: '1.875rem' }}>Gutura</DialogTitle>
+        <DialogTitle sx={{ my: 0.5, fontSize: '1.875rem' }}>Ingoboka</DialogTitle>
         <DialogContent sx={{ width: '700px' }}>
           <Typography>Amazina</Typography>
           <TextField

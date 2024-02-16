@@ -24,6 +24,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@mui/material/styles';
 
 const kuguzaDb = collection(database, 'kuguza');
+const sreportDb = collection(database, 'sreport');
 function FormDialog() {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState(null);
@@ -153,7 +154,6 @@ function FormDialog() {
   const onloanachange = (e) => {
     setloana(parseInt(e.target.value));
   };
-  console.log('value', value);
   return (
     <React.Fragment>
       <Button variant="outlined" onClick={handleClickOpen}>
@@ -178,6 +178,7 @@ function FormDialog() {
             // Query Firestore to get the document
             const querySnapshot = await getDocs(query(kuguzaDb, where('nid', '==', value)));
             const querySnapshotWithdept = await getDocs(query(kuguzaDb, where('nid', '==', value), where('sharedebt', '>', 0)));
+            const querySnapshot2 = await getDocs(query(sreportDb));
 
             if (querySnapshot.empty) {
               const ind = 12;
@@ -238,6 +239,13 @@ function FormDialog() {
                   }
                 });
                 await updateDoc(doc(kuguzaDb, docSnapshot.id), data);
+                await updateDoc(doc(sreportDb, querySnapshot2.docs[0].id), {
+                  ayishyuweKuguza: querySnapshot2.docs[0].data().ayishyuweKuguza+paid,
+                  kuguzaDept: ((querySnapshot2.docs[0].data().ayishyuweKuguza + paid )- querySnapshot2.docs[0].data().ayagujijweTotal) 
+                });
+                console.log("paid",paid);
+                console.log("querySnapshot2.docs[0].data().ayagujijweTotal",querySnapshot2.docs[0].data().ayagujijweTotal);
+                console.log("querySnapshot2.docs[0].data().ayagujijweTotal - paid",querySnapshot2.docs[0].data().ayagujijweTotal - paid);
                 getKuguza(selectedmonth);
               } else {
                 const ind = 12;
@@ -273,6 +281,9 @@ function FormDialog() {
                   }
                 });
                 await updateDoc(doc(kuguzaDb, docSnapshot.id), data);
+                await updateDoc(doc(sreportDb, querySnapshot2.docs[0].id), {
+                  ayagujijweTotal: querySnapshot2.docs[0].data().ayagujijweTotal+loan 
+                });
                 getKuguza(selectedmonth);
               }
             }
@@ -289,6 +300,7 @@ function FormDialog() {
             id="standard-select-currency"
             fullWidth
             select
+            required
             // value={value === null ? ' <em style={{color:"gray"}}>Select an option</em>' : value}
             value={value}
             onChange={(e) => {

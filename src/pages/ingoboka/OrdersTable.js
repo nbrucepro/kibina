@@ -16,10 +16,10 @@ import {
   where
 } from 'firebase/firestore';
 import { useDispatch, useSelector } from 'react-redux';
-import { guturaFromfir, toggleModals } from 'store/reducers/menu';
+import { ingobokaFromfir, toggleModals } from 'store/reducers/menu';
 import { CircularProgress } from '../../../node_modules/@mui/material/index';
 
-const guturaDb = collection(database, 'gutura');
+const guturaDb = collection(database, 'ingoboka');
 
 // function createData(
 //   amazina,
@@ -203,13 +203,13 @@ export default function OrderTable() {
     for (const members of ridesSnapshot?.docs) {
       ridesData.push({ ...members.data() });
     }
-    dispatch(guturaFromfir(ridesData));
+    dispatch(ingobokaFromfir(ridesData));
   };
   useEffect(() => {
     getGutura();
     // retudata()
   }, []);
-  const { guturadata } = useSelector((state) => state.menu);
+  const { ingobokadata } = useSelector((state) => state.menu);
   const [members, setMembers] = useState([]);
   const membersDb = collection(database, 'members');
   const getmebers = async () => {
@@ -238,26 +238,7 @@ export default function OrderTable() {
   for (let i = 0; i <= 12; i++) {
     arrayOfArrays.push([]);
   }
-  const previousTotal = useRef(0);
-  useEffect(()=>{
-    const total = arrayOfArrays[12].reduce((acc, cur) => acc + cur, 0);
-    const gutaraReportdata={
-      total
-    }
-    if (total !== previousTotal.current) {
-      const gutaraReportdata = {
-        total: total
-      };
-      dispatch(toggleModals({ gutaraReportdata }));
-      previousTotal.current = total; // Update the previous total
-    }
-    // if(guturadata?.length > 0 && total){
-    //   console.log('gutaraReportdata',gutaraReportdata)
-    //   console.log(guturadata?.length);
-    //   dispatch(toggleModals({ gutaraReportdata }));
-    // }
-
-  },[arrayOfArrays,dispatch,guturadata])
+  
   return (
     <Box>
       <TableContainer
@@ -284,8 +265,7 @@ export default function OrderTable() {
           <OrderTableHead order={order} orderBy={orderBy} />
           {members?.length > 0 ? (
             <TableBody>
-              {guturadata.map((row, index) => {
-                // {stableSort(guturadata, getComparator(order, orderBy)).map((row, index) => {
+              {ingobokadata.map((row, index) => {
                 const isItemSelected = isSelected(row.trackingNo);
                 const labelId = `enhanced-table-checkbox-${index}`;
 

@@ -3,6 +3,8 @@ import Loadable from 'components/Loadable';
 import MainLayout from 'layout/MainLayout';
 import { Navigate,Outlet } from 'react-router-dom';
 import Login from 'pages/login/index';
+import ShortReport from 'pages/report/index';
+import Ingoboka from 'pages/ingoboka/index';
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 const Kuguza = Loadable(lazy(() => import('pages/kuguza')));
 const Gutira = Loadable(lazy(() => import('pages/gutira')));
@@ -22,6 +24,10 @@ const MainRoutes =
       element: <DashboardDefault />
     },
     {
+      path: '/app/ingoboka',
+      element: <Ingoboka />
+    },
+    {
       path: '/app/kuguza',
       element: <Kuguza />
     },
@@ -32,6 +38,10 @@ const MainRoutes =
     {
       path: '/app/members',
       element: <Users />
+    },
+    {
+      path: '/app/shortreport',
+      element: <ShortReport />
     },
     { path: '/app/', element: <Navigate to="/app/gutura" /> }
     ,
