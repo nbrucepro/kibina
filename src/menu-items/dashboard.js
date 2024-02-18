@@ -60,13 +60,13 @@ const dashboard = {
         url: '/app/members',
         icon: icons.UserOutlined
       },
-      {
-        id: 'report',
-        title: 'Raport ngufi',
-        type: 'item',
-        url: '/app/shortreport',
-        icon: icons.ReadOutlined
-      }
+      // {
+      //   id: 'report',
+      //   title: 'Raport ngufi',
+      //   type: 'item',
+      //   url: '/app/shortreport',
+      //   icon: icons.ReadOutlined
+      // }
     );
 }
 export default dashboard;

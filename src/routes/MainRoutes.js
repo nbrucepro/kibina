@@ -39,10 +39,10 @@ const MainRoutes =
       path: '/app/members',
       element: <Users />
     },
-    {
-      path: '/app/shortreport',
-      element: <ShortReport />
-    },
+    // {
+    //   path: '/app/shortreport',
+    //   element: <ShortReport />
+    // },
     { path: '/app/', element: <Navigate to="/app/gutura" /> }
     ,
     // {
