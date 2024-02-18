@@ -277,6 +277,7 @@ function FormDialog() {
             label="Telephone"
             sx={{ my: 2 }}
             defaultValue={editmember && editData?.telephone}
+            disabled={editmember && true}
             fullWidth
             variant="outlined"
             InputLabelProps={{ shrink: true, style: { fontSize: '1.2rem' } }}
@@ -287,6 +288,7 @@ function FormDialog() {
             margin="dense"
             id="nid"
             // name="nid"
+            disabled={editmember && true}
             value={nidValue}
             onChange={handleNidChange}
             inputProps={{
