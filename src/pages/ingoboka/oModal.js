@@ -155,7 +155,7 @@ function FormDialog() {
               const docSnapshot = querySnapshot.docs[0];
               const docData = docSnapshot.data();
               let total = docData.total || 0;
-              let guturaTotal =querySnapshot2.docs[0].data().guturaTotal || 0;
+              let ingobokaTotal =querySnapshot2.docs[0].data().ingobokaTotal || 0;
               if (docData[month] !== 0) {
                 total -= docData[month];
               }
@@ -164,7 +164,7 @@ function FormDialog() {
                 total: total + amount
               });
               await updateDoc(doc(sreportDb, querySnapshot2.docs[0].id), {
-                guturaTotal: guturaTotal+amount
+                ingobokaTotal: ingobokaTotal+amount
               });
               getGutura();
             } else {
