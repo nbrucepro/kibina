@@ -9,6 +9,7 @@ const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 const Kuguza = Loadable(lazy(() => import('pages/kuguza')));
 const Gutira = Loadable(lazy(() => import('pages/gutira')));
 const Users = Loadable(lazy(() => import('pages/users')));
+const Imigabane = Loadable(lazy(() => import('pages/imigabane')));
 
 const usersmString = localStorage.getItem("userm");
 const usersm = usersmString ? JSON.parse(usersmString) : null;
@@ -22,6 +23,10 @@ const MainRoutes =
     {
       path: '/app/gutura',
       element: <DashboardDefault />
+    },
+    {
+      path: '/app/imigabane',
+      element: <Imigabane />
     },
     {
       path: '/app/ingoboka',

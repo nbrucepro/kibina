@@ -23,6 +23,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@mui/material/styles';
 
 const guturaDb = collection(database, 'gutura');
+const imigabaneDb = collection(database, 'imigabane');
 const sreportDb = collection(database, 'sreport');
 function FormDialog() {
   const [open, setOpen] = React.useState(false);
@@ -142,6 +143,7 @@ function FormDialog() {
 
             // Query Firestore to get the document
             const querySnapshot = await getDocs(query(guturaDb, where('nid', '==', value)));
+            const querySnapshotimigabane = await getDocs(query(imigabaneDb, where('nid', '==', value)));
             const querySnapshot2 = await getDocs(query(sreportDb));
             const sreportDbJson = {
               guturaTotal:0,
@@ -153,6 +155,7 @@ function FormDialog() {
             };
             if (!querySnapshot.empty) {
               const docSnapshot = querySnapshot.docs[0];
+              const docSnapshot2 = querySnapshotimigabane.docs[0];
               const docData = docSnapshot.data();
               let total = docData.total || 0;
               let guturaTotal =querySnapshot2.docs[0].data().guturaTotal || 0;
@@ -162,6 +165,10 @@ function FormDialog() {
               await updateDoc(doc(guturaDb, docSnapshot.id), {
                 [month]: amount,
                 total: total + amount
+              });
+              await updateDoc(doc(imigabaneDb, docSnapshot2.id), {
+                [month]: (amount)/1000,
+                total: (total + amount)/1000
               });
               await updateDoc(doc(sreportDb, querySnapshot2.docs[0].id), {
                 guturaTotal: guturaTotal+amount

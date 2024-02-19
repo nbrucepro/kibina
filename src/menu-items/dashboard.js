@@ -27,6 +27,14 @@ const dashboard = {
       // breadcrumbs: false
     },
     {
+      id: 'imigabane',
+      title: 'Imigabane',
+      type: 'item',
+      url: '/app/imigabane',
+      icon: icons.DashboardOutlined
+      // breadcrumbs: false
+    },
+    {
       id: 'ingoboka',
       title: 'Ingoboka',
       type: 'item',

@@ -12,12 +12,12 @@ import { BrowserView, MobileView } from 'react-device-detect';
 const RootStyle = styled(BrowserView)({
   flexGrow: 1,
   height: '100%',
-  overflow: 'hidden'
+  // overflow: 'hidden'
 });
 
 // scroll bar wrapper
 const SimpleBarStyle = styled(SimpleBar)(({ theme }) => ({
-  maxHeight: '100%',
+  height: '100%',
   '& .simplebar-scrollbar': {
     '&:before': {
       backgroundColor: alpha(theme.palette.grey[500], 0.48)
@@ -29,9 +29,9 @@ const SimpleBarStyle = styled(SimpleBar)(({ theme }) => ({
   '& .simplebar-track.simplebar-vertical': {
     width: 10
   },
-  '& .simplebar-track.simplebar-horizontal .simplebar-scrollbar': {
-    height: 6
-  },
+  // '& .simplebar-track.simplebar-horizontal .simplebar-scrollbar': {
+  //   height: 6
+  // },
   '& .simplebar-mask': {
     zIndex: 'inherit'
   }
@@ -43,9 +43,9 @@ export default function SimpleBarScroll({ children, sx, ...other }) {
   return (
     <>
       <RootStyle>
-        <SimpleBarStyle timeout={500} clickOnTrack={false} sx={sx} {...other}>
+        {/* <SimpleBarStyle timeout={500} clickOnTrack={false} sx={sx} {...other}> */}
           {children}
-        </SimpleBarStyle>
+        {/* </SimpleBarStyle> */}
       </RootStyle>
       <MobileView>
         <Box sx={{ overflowX: 'auto', ...sx }} {...other}>

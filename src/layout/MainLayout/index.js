@@ -24,7 +24,6 @@ const MainLayout = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const isPathGutura = location.pathname === "/app/gutura"
-  console.log({location,isPathGutura})
 
   const { drawerOpen } = useSelector((state) => state.menu);
 
@@ -49,10 +48,10 @@ const MainLayout = () => {
   }, [drawerOpen]);
 
   return (
-    <Box sx={{ display: 'flex', width: {xl:`${isPathGutura?"91%":"100%"}`} }}>
+    <Box sx={{ display: 'flex', width: {xl:`${isPathGutura?"100%":"100%"}`} }}>
       <Header open={open} handleDrawerToggle={handleDrawerToggle} />
       <Drawer open={open} handleDrawerToggle={handleDrawerToggle} />
-      <Box component="main" sx={{ width: `${isPathGutura?"95%":"100%"}`, flexGrow: 1, p: { xs: 2, sm: 3 } }}>
+      <Box component="main" sx={{ width: `${isPathGutura?"100%":"100%"}`, flexGrow: 1, p: { xs: 2, sm: 3 } }}>
         <Toolbar />
         <Breadcrumbs navigation={navigation} title />
         <Outlet />
