@@ -41,11 +41,25 @@ const defaultTheme = createTheme();
 export default function Login() {
   const [telValue, setTelValue] = React.useState('');
   const [loading,setLoading] = React.useState(false);
+  const [confirmationResult, setConfirmationResult] = React.useState(null);
+  const [otpSent,setOtpSent] = React.useState(false);
   const handleChange = (event) => {
     const newValue = event.target.value.replace(/\D/g, '').slice(0, 10); // Remove non-numeric characters and limit to 10 digits
     setTelValue(newValue);
   };
   const navigate = useNavigate();
+  // const handleSendOtp = async (event )=>{
+  //   try{
+  //     // setState((prev: any) => ({ ...prev, loading: true }));
+  //     initializeRecaptchaVerifier();
+  //     const confirmation = await signInWithPhoneNumber(auth, telValue, window.recaptchaVerifier)
+  //     setConfirmationResult(confirmation);
+  //     setOtpSent(true);
+  //   }
+  //   catch(error){
+  //     console.log("error",error);
+  //   }
+  // }
   const handleSubmit = async (event) => {
     setLoading(true);
     event.preventDefault();

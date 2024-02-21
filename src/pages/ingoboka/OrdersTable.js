@@ -18,58 +18,10 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { ingobokaFromfir, toggleModals } from 'store/reducers/menu';
 import { CircularProgress } from '../../../node_modules/@mui/material/index';
+import {updateDoc,doc} from "firebase/firestore"
 
 const guturaDb = collection(database, 'ingoboka');
-
-// function createData(
-//   amazina,
-//   ukwezi1,
-//   ukwezi2,
-//   ukwezi3,
-//   ukwezi4,
-//   ukwezi5,
-//   ukwezi6,
-//   ukwezi7,
-//   ukwezi8,
-//   ukwezi9,
-//   ukwezi10,
-//   ukwezi11,
-//   ukwezi12
-// ) {
-//   return { amazina, ukwezi1, ukwezi2, ukwezi3, ukwezi4, ukwezi5, ukwezi6, ukwezi7, ukwezi8, ukwezi9, ukwezi10, ukwezi11, ukwezi12 };
-// }
-
-// const rows = [createData('John kamali', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)];
-
-// function descendingComparator(a, b, orderBy) {
-//   if (b[orderBy] < a[orderBy]) {
-//     return -1;
-//   }
-//   if (b[orderBy] > a[orderBy]) {
-//     return 1;
-//   }
-//   return 0;
-// }
-
-// function getComparator(order, orderBy) {
-//   return order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
-// }
-
-// function stableSort(array, comparator) {
-//   const stabilizedThis = array?.map((el, index) => [el, index]);
-//   stabilizedThis.sort((a, b) => {
-//     const order = comparator(a[0], b[0]);
-//     if (order !== 0) {
-//       return order;
-//     }
-//     return a[1] - b[1];
-//   });
-//   return stabilizedThis.map((el) => el[0]);
-// }
-// function addMonet() {
-//   return rows[0].ukwezi9;
-// }
-// ==============================|| ORDER TABLE - HEADER CELL ||============================== //
+const sreportDb = collection(database, 'sreport');
 
 const headCells = [
   {
@@ -234,10 +186,24 @@ export default function OrderTable() {
   }
   const arrayOfArrays = [];
 
-  // Loop to create 12 empty arrays
   for (let i = 0; i <= 12; i++) {
     arrayOfArrays.push([]);
   }
+  const previousTotal = useRef(0);
+  const updateCuturatotal = async (total) => {
+    const querySnapshot2 = await getDocs(query(sreportDb));
+
+    await updateDoc(doc(sreportDb, querySnapshot2.docs[0].id), {
+      ingobokaTotal: total
+    });
+  };
+  useEffect(() => {
+    const total = arrayOfArrays[12].reduce((acc, cur) => acc + cur, 0);
+    if (total !== previousTotal.current || total === 0) {
+      updateCuturatotal(total);
+      previousTotal.current = total; 
+    }
+  }, [arrayOfArrays, ingobokadata]);
   
   return (
     <Box>

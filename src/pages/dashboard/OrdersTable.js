@@ -18,58 +18,9 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { guturaFromfir, toggleModals } from 'store/reducers/menu';
 import { CircularProgress } from '../../../node_modules/@mui/material/index';
+import { updateDoc, doc } from 'firebase/firestore';
 
 const guturaDb = collection(database, 'gutura');
-
-// function createData(
-//   amazina,
-//   ukwezi1,
-//   ukwezi2,
-//   ukwezi3,
-//   ukwezi4,
-//   ukwezi5,
-//   ukwezi6,
-//   ukwezi7,
-//   ukwezi8,
-//   ukwezi9,
-//   ukwezi10,
-//   ukwezi11,
-//   ukwezi12
-// ) {
-//   return { amazina, ukwezi1, ukwezi2, ukwezi3, ukwezi4, ukwezi5, ukwezi6, ukwezi7, ukwezi8, ukwezi9, ukwezi10, ukwezi11, ukwezi12 };
-// }
-
-// const rows = [createData('John kamali', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)];
-
-// function descendingComparator(a, b, orderBy) {
-//   if (b[orderBy] < a[orderBy]) {
-//     return -1;
-//   }
-//   if (b[orderBy] > a[orderBy]) {
-//     return 1;
-//   }
-//   return 0;
-// }
-
-// function getComparator(order, orderBy) {
-//   return order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
-// }
-
-// function stableSort(array, comparator) {
-//   const stabilizedThis = array?.map((el, index) => [el, index]);
-//   stabilizedThis.sort((a, b) => {
-//     const order = comparator(a[0], b[0]);
-//     if (order !== 0) {
-//       return order;
-//     }
-//     return a[1] - b[1];
-//   });
-//   return stabilizedThis.map((el) => el[0]);
-// }
-// function addMonet() {
-//   return rows[0].ukwezi9;
-// }
-// ==============================|| ORDER TABLE - HEADER CELL ||============================== //
 
 const headCells = [
   {
@@ -162,7 +113,7 @@ const headCells = [
 
 function OrderTableHead({ order, orderBy }) {
   return (
-    <TableHead sx={{backgroundColor:"#f0f0f0"}}>
+    <TableHead sx={{ backgroundColor: '#f0f0f0' }}>
       <TableRow>
         {headCells.map((headCell) => (
           <TableCell
@@ -212,6 +163,7 @@ export default function OrderTable() {
   const { guturadata } = useSelector((state) => state.menu);
   const [members, setMembers] = useState([]);
   const membersDb = collection(database, 'members');
+  const sreportDb = collection(database, 'sreport');
   const getmebers = async () => {
     const q = query(membersDb);
     const ridesSnapshot = await getDocs(q);
@@ -234,30 +186,24 @@ export default function OrderTable() {
   }
   const arrayOfArrays = [];
 
-  // Loop to create 12 empty arrays
   for (let i = 0; i <= 12; i++) {
     arrayOfArrays.push([]);
   }
   const previousTotal = useRef(0);
-  useEffect(()=>{
-    const total = arrayOfArrays[12].reduce((acc, cur) => acc + cur, 0);
-    const gutaraReportdata={
-      total
-    }
-    if (total !== previousTotal.current) {
-      const gutaraReportdata = {
-        total: total
-      };
-      dispatch(toggleModals({ gutaraReportdata }));
-      previousTotal.current = total; // Update the previous total
-    }
-    // if(guturadata?.length > 0 && total){
-    //   console.log('gutaraReportdata',gutaraReportdata)
-    //   console.log(guturadata?.length);
-    //   dispatch(toggleModals({ gutaraReportdata }));
-    // }
+  const updateCuturatotal = async (total) => {
+    const querySnapshot2 = await getDocs(query(sreportDb));
 
-  },[arrayOfArrays,dispatch,guturadata])
+    await updateDoc(doc(sreportDb, querySnapshot2.docs[0].id), {
+      guturaTotal: total
+    });
+  };
+  useEffect(() => {
+    const total = arrayOfArrays[12].reduce((acc, cur) => acc + cur, 0);
+    if (total !== previousTotal.current) {
+      updateCuturatotal(total);
+      previousTotal.current = total; 
+    }
+  }, [arrayOfArrays, guturadata]);
   return (
     <Box>
       <TableContainer
@@ -285,7 +231,6 @@ export default function OrderTable() {
           {members?.length > 0 ? (
             <TableBody>
               {guturadata.map((row, index) => {
-                // {stableSort(guturadata, getComparator(order, orderBy)).map((row, index) => {
                 const isItemSelected = isSelected(row.trackingNo);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -361,8 +306,8 @@ export default function OrderTable() {
               })}
               {loggedInusersm?.role === 1 && (
                 // <TableHead>
-                <TableRow sx={{backgroundColor:"#f0f0f0"}}>
-                  <TableCell sx={{fontWeight: 'bold'}} component="th" scope="row" align="left">
+                <TableRow sx={{ backgroundColor: '#f0f0f0' }}>
+                  <TableCell sx={{ fontWeight: 'bold' }} component="th" scope="row" align="left">
                     Yose hamwe
                   </TableCell>
                   {arrayOfArrays?.map((arrayItem, index) => (

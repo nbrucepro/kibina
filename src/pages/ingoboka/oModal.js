@@ -143,14 +143,7 @@ function FormDialog() {
             // Query Firestore to get the document
             const querySnapshot = await getDocs(query(guturaDb, where('nid', '==', value)));
             const querySnapshot2 = await getDocs(query(sreportDb));
-            const sreportDbJson = {
-              guturaTotal:0,
-              ingobokaTotal:0,
-              ayatiriweTotal:0,
-              ayagujijweTotal:0,
-              ayishyuweKuguza:0,
-              ayishyuweGutira:0,
-            };
+
             if (!querySnapshot.empty) {
               const docSnapshot = querySnapshot.docs[0];
               const docData = docSnapshot.data();

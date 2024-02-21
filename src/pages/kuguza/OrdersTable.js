@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
 // material-ui
@@ -66,6 +66,7 @@ OrderStatus.propTypes = {
 // ==============================|| ORDER TABLE ||============================== //
 
 const kuguzaDb = collection(database, 'kuguza');
+const sreportDb = collection(database, 'sreport');
 export default function OrderTable() {
   const [order] = useState('asc');
   const [orderBy] = useState('trackingNo');
@@ -182,6 +183,30 @@ export default function OrderTable() {
   useEffect(() => {
     getKuguza();
   }, []);
+  const arrayOfArrays = [];
+
+  for (let i = 0; i < 2; i++) {
+    arrayOfArrays.push([]);
+  }
+  const previousTotal = useRef(0);
+  const previousTotal2 = useRef(0);
+  const updateCuturatotal = async (total,total2) => {
+    const querySnapshot2 = await getDocs(query(sreportDb));
+
+    await updateDoc(doc(sreportDb, querySnapshot2.docs[0].id), {
+      ayagujijweTotal: total,
+      ayishyuweKuguza: total2,
+    });
+  };
+  useEffect(() => {
+    const total = arrayOfArrays[0].reduce((acc, cur) => acc + cur, 0);
+    const total2 = arrayOfArrays[1].reduce((acc, cur) => acc + cur, 0);
+    if (total !== previousTotal.current || total === 0) {
+      updateCuturatotal(total,total2);
+      previousTotal.current = total; 
+      previousTotal2.current = total2; 
+    }
+  }, [arrayOfArrays, kuguzadata]);
   return (
     <Box>
       <TableContainer
@@ -211,6 +236,10 @@ export default function OrderTable() {
               {kuguzadata?.map((row, index) => {
                 const isItemSelected = isSelected(row.trackingNo);
                 const labelId = `enhanced-table-checkbox-${index}`;
+                for (let i = 1; i <= 12; i++) {
+                  arrayOfArrays[0].push(row[`month${i}`]?.loan);
+                  arrayOfArrays[1].push(row[`month${i}`]?.paid);
+                }
                 return (
                   <TableRow
                     hover

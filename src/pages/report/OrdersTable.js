@@ -159,7 +159,7 @@ export default function OrderTable() {
     arrayOfArrays.push([]);
   }
   const { sreportData } = useSelector((state) => state.menu);
-  console.log('sreportData', sreportData);
+  // console.log('sreportData', sreportData);
   return (
     <Box>
       <TableContainer
