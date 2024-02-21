@@ -27,6 +27,7 @@ const membersDb = collection(database, 'members');
 const kuguzaDb = collection(database, 'kuguza');
 const gutiraDb = collection(database, 'gutira');
 const guturaDb = collection(database, 'gutura');
+const imigabaneDb = collection(database, 'imigabane');
 const ingobokaDb = collection(database, 'ingoboka');
 const sreportDb = collection(database, 'sreport');
 function FormDialog() {
@@ -225,6 +226,7 @@ function FormDialog() {
                 await addDoc(kuguzaDb, kuguzajson);
                 await addDoc(gutiraDb, gutirajson);
                 await addDoc(guturaDb, guturajson);
+                await addDoc(imigabaneDb, guturajson);
                 await addDoc(ingobokaDb, ingobokajson);
                 // await addDoc(sreportDb, sreportDbJson);
                 // await updateDoc(doc(sreportDb, querySnapshot3.docs[0].id), {
