@@ -219,7 +219,7 @@ function FormDialog() {
                 iterableArray.forEach((id) => {
                   if (`month${id}` === sharedebtM) {
                     data[`${sharedebtM}`] = {
-                      loan: loan ? Math.round(loan) : docDataPrevMonth?.loan,
+                      loan: docSnapshot.data()[`month${id}`]?.loan>0 ? docSnapshot.data()[`month${id}`]?.loan: Math.round(loan),
                       interest: theextras == 0 ? Math.round(interest) : 0,
                       loanwithintereset: Math.round(loanwithintereset),
                       paid: Math.round(alreadpaid),
@@ -239,10 +239,10 @@ function FormDialog() {
                   }
                 });
                 await updateDoc(doc(kuguzaDb, docSnapshot.id), data);
-                await updateDoc(doc(sreportDb, querySnapshot2.docs[0].id), {
-                  ayishyuweKuguza: querySnapshot2.docs[0].data().ayishyuweKuguza+paid,
-                  kuguzaDept: ((querySnapshot2.docs[0].data().ayishyuweKuguza + paid )- querySnapshot2.docs[0].data().ayagujijweTotal) 
-                });
+                // await updateDoc(doc(sreportDb, querySnapshot2.docs[0].id), {
+                //   ayishyuweKuguza: querySnapshot2.docs[0].data().ayishyuweKuguza+paid,
+                //   kuguzaDept: ((querySnapshot2.docs[0].data().ayishyuweKuguza + paid )- querySnapshot2.docs[0].data().ayagujijweTotal) 
+                // });
                 console.log("paid",paid);
                 console.log("querySnapshot2.docs[0].data().ayagujijweTotal",querySnapshot2.docs[0].data().ayagujijweTotal);
                 console.log("querySnapshot2.docs[0].data().ayagujijweTotal - paid",querySnapshot2.docs[0].data().ayagujijweTotal - paid);
@@ -262,7 +262,7 @@ function FormDialog() {
                 iterableArray.forEach((id) => {
                   if (`month${id}` === selectedmonth) {
                     data[`${selectedmonth}`] = {
-                      loan: loan ? Math.round(loan) : docDataPrevMonth?.loan,
+                      loan: docSnapshot.data()[`month${id}`]?.loan>0 ? docSnapshot.data()[`month${id}`]?.loan: Math.round(loan),
                       interest: Math.round(interest),
                       loanwithintereset: Math.round(loanwithintereset),
                       paid: Math.round(alreadpaid),
@@ -281,9 +281,9 @@ function FormDialog() {
                   }
                 });
                 await updateDoc(doc(kuguzaDb, docSnapshot.id), data);
-                await updateDoc(doc(sreportDb, querySnapshot2.docs[0].id), {
-                  ayagujijweTotal: querySnapshot2.docs[0].data().ayagujijweTotal+loan 
-                });
+                // await updateDoc(doc(sreportDb, querySnapshot2.docs[0].id), {
+                //   ayagujijweTotal: querySnapshot2.docs[0].data().ayagujijweTotal+loan 
+                // });
                 getKuguza(selectedmonth);
               }
             }

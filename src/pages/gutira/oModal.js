@@ -222,7 +222,7 @@ function FormDialog() {
                 iterableArray.forEach((id) => {
                   if (`month${id}` === sharedebtM) {
                     data[`${sharedebtM}`] = {
-                      loan: loan ? Math.round(loan) : docDataPrevMonth?.loan,
+                      loan: docSnapshot.data()[`month${id}`]?.loan>0 ? docSnapshot.data()[`month${id}`]?.loan: Math.round(loan),
                       interest: theextras == 0 ? Math.round(interest) : 0,
                       loanwithintereset: Math.round(loanwithintereset),
                       paid: Math.round(alreadpaid),
@@ -242,10 +242,10 @@ function FormDialog() {
                   }
                 });
                 await updateDoc(doc(gutiraDb, docSnapshot.id), data);
-                await updateDoc(doc(sreportDb, querySnapshot2.docs[0].id), {
-                            ayishyuweGutira: querySnapshot2.docs[0].data().ayishyuweGutira+paid,
-                            gutiraDept: ((querySnapshot2.docs[0].data().ayishyuweGutira + paid )- querySnapshot2.docs[0].data().ayatiriweTotal) 
-                          });
+                // await updateDoc(doc(sreportDb, querySnapshot2.docs[0].id), {
+                //             ayishyuweGutira: querySnapshot2.docs[0].data().ayishyuweGutira+paid,
+                //             gutiraDept: ((querySnapshot2.docs[0].data().ayishyuweGutira + paid )- querySnapshot2.docs[0].data().ayatiriweTotal) 
+                //           });
                 getgutira(selectedmonth);
               } else {
                 const ind = 12;
@@ -262,7 +262,7 @@ function FormDialog() {
                 iterableArray.forEach((id) => {
                   if (`month${id}` === selectedmonth) {
                     data[`${selectedmonth}`] = {
-                      loan: loan ? Math.round(loan) : docDataPrevMonth?.loan,
+                      loan: docSnapshot.data()[`month${id}`]?.loan>0 ? docSnapshot.data()[`month${id}`]?.loan: Math.round(loan),
                       interest: Math.round(interest),
                       loanwithintereset: Math.round(loanwithintereset),
                       paid: Math.round(alreadpaid),
@@ -281,9 +281,9 @@ function FormDialog() {
                   }
                 });
                 await updateDoc(doc(gutiraDb, docSnapshot.id), data);
-                await updateDoc(doc(sreportDb, querySnapshot2.docs[0].id), {
-                  ayatiriweTotal: querySnapshot2.docs[0].data().ayatiriweTotal+loan 
-                });
+                // await updateDoc(doc(sreportDb, querySnapshot2.docs[0].id), {
+                //   ayatiriweTotal: querySnapshot2.docs[0].data().ayatiriweTotal+loan 
+                // });
                 getgutira(selectedmonth);
               }
             }

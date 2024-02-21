@@ -156,9 +156,9 @@ function FormDialog() {
                 [month]: amount,
                 total: total + amount
               });
-              await updateDoc(doc(sreportDb, querySnapshot2.docs[0].id), {
-                ingobokaTotal: ingobokaTotal+amount
-              });
+              // await updateDoc(doc(sreportDb, querySnapshot2.docs[0].id), {
+              //   ingobokaTotal: ingobokaTotal+amount
+              // });
               getGutura();
             } else {
               console.error("No document found for 'John Kamali'");
