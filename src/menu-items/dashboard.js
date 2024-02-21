@@ -42,13 +42,13 @@ const dashboard = {
       icon: icons.DashboardOutlined
       // breadcrumbs: false
     },
-    {
-      id: 'Kuguza',
-      title: 'Kuguza',
-      type: 'item',
-      url: '/app/kuguza',
-      icon: icons.ChromeOutlined
-    },
+    // {
+    //   id: 'Kuguza',
+    //   title: 'Kuguza',
+    //   type: 'item',
+    //   url: '/app/kuguza',
+    //   icon: icons.ChromeOutlined
+    // },
     {
       id: 'Gutira',
       title: 'Gutira',
