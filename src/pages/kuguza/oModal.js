@@ -172,7 +172,6 @@ function FormDialog() {
             const formJson = Object.fromEntries(formData.entries());
             const loan = loana;
             const paid = parseInt(formJson.paid);
-            // const debt = loan - paiD
             const month = formJson.month;
 
             // Query Firestore to get the document
@@ -204,14 +203,13 @@ function FormDialog() {
             } else {
               if (!querySnapshotWithdept.empty) {
                 const docSnapshot = querySnapshot.docs[0];
-                // const debtmonth = querySnapshot.docs[0].month;
                 const sharedebtM = `month${docSnapshot.data()?.sharedebt}`;
                 const docDataPrevMonth = docSnapshot.data()[sharedebtM];
                 const alreadpaid = docDataPrevMonth.paid + paid;
                 const debt = docDataPrevMonth?.loanwithintereset !== 0 ? docDataPrevMonth?.loanwithintereset - paid : loan;
                 const interest = (debt * 3) / 100;
                 const loanwithintereset = interest + debt;
-                const theextras = loanwithintereset < 0 ? Math.abs(loanwithintereset) : 0;
+                // const theextras = loanwithintereset < 0 ? Math.abs(loanwithintereset) : 0;
                 const ind = 12;
                 const iterableArray = Array.from({ length: ind }, (_, index) => index + 1);
                 const sharedebt = debt === 0 ? parseInt(0) : docSnapshot.data()?.sharedebt;
@@ -220,12 +218,13 @@ function FormDialog() {
                   if (`month${id}` === sharedebtM) {
                     data[`${sharedebtM}`] = {
                       loan: docSnapshot.data()[`month${id}`]?.loan>0 ? docSnapshot.data()[`month${id}`]?.loan: Math.round(loan),
-                      interest: theextras == 0 ? Math.round(interest) : 0,
+                      interest: Math.round(interest),
+                      // interest: theextras == 0 ? Math.round(interest) : 0,
                       loanwithintereset: Math.round(loanwithintereset),
                       paid: Math.round(alreadpaid),
                       debt: Math.round(debt),
                       prevdebt: Math.round(loanwithintereset),
-                      theextras
+                      // theextras
                     };
                   } else {
                     data[`month${id}`] = {
@@ -239,13 +238,6 @@ function FormDialog() {
                   }
                 });
                 await updateDoc(doc(kuguzaDb, docSnapshot.id), data);
-                // await updateDoc(doc(sreportDb, querySnapshot2.docs[0].id), {
-                //   ayishyuweKuguza: querySnapshot2.docs[0].data().ayishyuweKuguza+paid,
-                //   kuguzaDept: ((querySnapshot2.docs[0].data().ayishyuweKuguza + paid )- querySnapshot2.docs[0].data().ayagujijweTotal) 
-                // });
-                console.log("paid",paid);
-                console.log("querySnapshot2.docs[0].data().ayagujijweTotal",querySnapshot2.docs[0].data().ayagujijweTotal);
-                console.log("querySnapshot2.docs[0].data().ayagujijweTotal - paid",querySnapshot2.docs[0].data().ayagujijweTotal - paid);
                 getKuguza(selectedmonth);
               } else {
                 const ind = 12;
