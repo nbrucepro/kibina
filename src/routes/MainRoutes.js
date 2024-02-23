@@ -32,14 +32,14 @@ const MainRoutes =
       path: '/app/ingoboka',
       element: <Ingoboka />
     },
-    {
-      path: '/app/kuguza',
-      element: <Kuguza />
-    },
-    {
-      path: '/app/gutira',
-      element: <Gutira />
-    },
+    // {
+    //   path: '/app/kuguza',
+    //   element: <Kuguza />
+    // },
+    // {
+    //   path: '/app/gutira',
+    //   element: <Gutira />
+    // },
     {
       path: '/app/members',
       element: <Users />
