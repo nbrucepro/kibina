@@ -42,20 +42,20 @@ const dashboard = {
       icon: icons.DashboardOutlined
       // breadcrumbs: false
     },
-    // {
-    //   id: 'Kuguza',
-    //   title: 'Kuguza',
-    //   type: 'item',
-    //   url: '/app/kuguza',
-    //   icon: icons.ChromeOutlined
-    // },
-    // {
-    //   id: 'Gutira',
-    //   title: 'Gutira',
-    //   type: 'item',
-    //   url: '/app/gutira',
-    //   icon: icons.ChromeOutlined
-    // }
+    {
+      id: 'Kuguza',
+      title: 'Kuguza',
+      type: 'item',
+      url: '/app/kuguza',
+      icon: icons.ChromeOutlined
+    },
+    {
+      id: 'Gutira',
+      title: 'Gutira',
+      type: 'item',
+      url: '/app/gutira',
+      icon: icons.ChromeOutlined
+    }
   ]
 };
 {
@@ -68,13 +68,13 @@ const dashboard = {
         url: '/app/members',
         icon: icons.UserOutlined
       },
-      // {
-      //   id: 'report',
-      //   title: 'Raport ngufi',
-      //   type: 'item',
-      //   url: '/app/shortreport',
-      //   icon: icons.ReadOutlined
-      // }
+      {
+        id: 'report',
+        title: 'Raport ngufi',
+        type: 'item',
+        url: '/app/shortreport',
+        icon: icons.ReadOutlined
+      }
     );
 }
 export default dashboard;

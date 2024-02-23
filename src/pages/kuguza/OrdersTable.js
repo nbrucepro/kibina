@@ -119,12 +119,12 @@ export default function OrderTable() {
       disablePadding: true,
       label: 'Inyungu 3% izakurikizwa'
     },
-    {
-      id: 'ukwezi3',
-      align: 'left',
-      disablePadding: true,
-      label: 'Ayo yagombye kwishyura'
-    },
+    // {
+    //   id: 'ukwezi3',
+    //   align: 'left',
+    //   disablePadding: true,
+    //   label: 'Ayo yagombye kwishyura'
+    // },
     {
       id: 'ukwezi4',
       align: 'left',
@@ -264,21 +264,33 @@ export default function OrderTable() {
                       <NumberFormat value={row[selectedmonth]?.loan?.toFixed()} displayType="text" thousandSeparator prefix="Frw " />
                     </TableCell>
                     <TableCell align="left">
-                      <NumberFormat
+                      {/* <NumberFormat
                         value={(row[selectedmonth]?.loanwithintereset + row[selectedmonth]?.paid - row[selectedmonth]?.loan)?.toFixed()}
+                        displayType="text"
+                        thousandSeparator
+                        prefix="Frw "
+                      /> */}
+                      <NumberFormat
+                        value={(row[selectedmonth]?.interest)?.toFixed()}
                         displayType="text"
                         thousandSeparator
                         prefix="Frw "
                       />
                     </TableCell>
-                    <TableCell align="left">
+                    {/* <TableCell align="left">
                       <NumberFormat
                         value={(row[selectedmonth]?.loanwithintereset + row[selectedmonth]?.paid)?.toFixed()}
                         displayType="text"
                         thousandSeparator
                         prefix="Frw "
                       />
-                    </TableCell>
+                        </TableCell> */}
+                      {/* <NumberFormat
+                        value={(row[selectedmonth]?.loanwithintereset)?.toFixed()}
+                        displayType="text"
+                        thousandSeparator
+                        prefix="Frw "
+                      /> */}
                     <TableCell align="left">
                       <NumberFormat value={row[selectedmonth]?.paid?.toFixed()} displayType="text" thousandSeparator prefix="Frw " />
                     </TableCell>
