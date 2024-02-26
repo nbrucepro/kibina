@@ -371,7 +371,7 @@ function FormDialog() {
             />
           )}
           {/* {(gutiradata[0][selectedmonth]?.prevdebt > 0) && ( */}
-          {isthere > 0 && (
+          {/* {isthere > 0 && ( */}
             <TextField
             autoFocus
             required
@@ -384,7 +384,7 @@ function FormDialog() {
             fullWidth
             variant="standard"
             />
-            )}
+            {/* // )} */}
           {/* // )} */}
           {/* </> */}
           {/* // )} */}

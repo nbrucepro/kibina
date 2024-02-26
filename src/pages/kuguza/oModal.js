@@ -206,6 +206,8 @@ function FormDialog() {
                 const docSnapshot = querySnapshot.docs[0];
                 const sharedebtM = `month${docSnapshot.data()?.sharedebt}`;
                 const docDataPrevMonth = docSnapshot.data()[sharedebtM];
+                console.log("paid",paid)
+                console.log("paid",typeof paid)
                 const alreadpaid = docDataPrevMonth.paid + paid;
                 const debt = docDataPrevMonth?.loanwithintereset !== 0 ? docDataPrevMonth?.loanwithintereset - paid : loan;
                 const interest = (debt * 3) / 100;
@@ -361,7 +363,7 @@ function FormDialog() {
             />
           )}
           {/* {(kuguzadata[0][selectedmonth]?.prevdebt > 0) && ( */}
-          {isthere > 0 && (
+          {/* {isthere > 0 && ( */}
           <TextField
             autoFocus
             required
@@ -374,7 +376,7 @@ function FormDialog() {
             fullWidth
             variant="standard"
           />
-          )}
+          {/* // )} */}
           {/* // )} */}
           {/* </> */}
           {/* // )} */}
