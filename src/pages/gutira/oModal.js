@@ -182,28 +182,28 @@ function FormDialog() {
             const querySnapshotWithdept = await getDocs(query(gutiraDb, where('nid', '==', value), where('sharedebt', '>', 0)));
             const querySnapshot2 = await getDocs(query(sreportDb));
 
-            if (querySnapshot.empty) {
-              const ind = 12;
-              const iterableArray = Array.from({ length: ind }, (_, index) => index + 1);
-              const data = {
-                year: 2024,
-                nid: value,
-                sharedebt: 0
-              };
+            // if (querySnapshot.empty) {
+            //   const ind = 12;
+            //   const iterableArray = Array.from({ length: ind }, (_, index) => index + 1);
+            //   const data = {
+            //     year: 2024,
+            //     nid: value,
+            //     sharedebt: 0
+            //   };
 
-              iterableArray.forEach((id) => {
-                data[`month${id}`] = {
-                  loan: 0,
-                  interest: 0,
-                  loanwithintereset: 0,
-                  paid: 0,
-                  debt: 0,
-                  prevdebt: 0
-                };
-              });
-              await addDoc(gutiraDb, data);
-              getgutira(selectedmonth);
-            } else {
+            //   iterableArray.forEach((id) => {
+            //     data[`month${id}`] = {
+            //       loan: 0,
+            //       interest: 0,
+            //       loanwithintereset: 0,
+            //       paid: 0,
+            //       debt: 0,
+            //       prevdebt: 0
+            //     };
+            //   });
+            //   await addDoc(gutiraDb, data);
+            //   getgutira(selectedmonth);
+            // } else {
               if (!querySnapshotWithdept.empty) {
                 const docSnapshot = querySnapshot.docs[0];
                 // const debtmonth = querySnapshot.docs[0].month;
@@ -288,7 +288,7 @@ function FormDialog() {
                 // });
                 getgutira(selectedmonth);
               }
-            }
+            // }
             setLoading(false);
             handleClose(); // Close the dialog
           }

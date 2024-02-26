@@ -180,34 +180,32 @@ function FormDialog() {
             const querySnapshotWithdept = await getDocs(query(kuguzaDb, where('nid', '==', value), where('sharedebt', '>', 0)));
             const querySnapshot2 = await getDocs(query(sreportDb));
 
-            if (querySnapshot.empty) {
-              const ind = 12;
-              const iterableArray = Array.from({ length: ind }, (_, index) => index + 1);
-              const data = {
-                year: 2024,
-                nid: value,
-                sharedebt: 0
-              };
+            // if (querySnapshot.empty) {
+            //   const ind = 12;
+            //   const iterableArray = Array.from({ length: ind }, (_, index) => index + 1);
+            //   const data = {
+            //     year: 2024,
+            //     nid: value,
+            //     sharedebt: 0
+            //   };
 
-              iterableArray.forEach((id) => {
-                data[`month${id}`] = {
-                  loan: 0,
-                  interest: 0,
-                  loanwithintereset: 0,
-                  paid: 0,
-                  debt: 0,
-                  prevdebt: 0
-                };
-              });
-              await addDoc(kuguzaDb, data);
-              getKuguza(selectedmonth);
-            } else {
+            //   iterableArray.forEach((id) => {
+            //     data[`month${id}`] = {
+            //       loan: 0,
+            //       interest: 0,
+            //       loanwithintereset: 0,
+            //       paid: 0,
+            //       debt: 0,
+            //       prevdebt: 0
+            //     };
+            //   });
+            //   await addDoc(kuguzaDb, data);
+            //   getKuguza(selectedmonth);
+            // } else {
               if (!querySnapshotWithdept.empty) {
                 const docSnapshot = querySnapshot.docs[0];
                 const sharedebtM = `month${docSnapshot.data()?.sharedebt}`;
                 const docDataPrevMonth = docSnapshot.data()[sharedebtM];
-                console.log("paid",paid)
-                console.log("paid",typeof paid)
                 const alreadpaid = docDataPrevMonth.paid + paid;
                 const debt = docDataPrevMonth?.loanwithintereset !== 0 ? docDataPrevMonth?.loanwithintereset - paid : loan;
                 const interest = (debt * 3) / 100;
@@ -281,7 +279,7 @@ function FormDialog() {
                 // });
                 getKuguza(selectedmonth);
               }
-            }
+            // }
             setLoading(false);
             handleClose(); // Close the dialog
           }
