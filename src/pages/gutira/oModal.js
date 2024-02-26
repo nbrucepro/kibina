@@ -362,7 +362,7 @@ function FormDialog() {
               required
               margin="dense"
               id="name"
-              label="Umubare w'ayagujijwe"
+              label="Umubare w'ayatiwe"
               type="number"
               fullWidth
               variant="standard"
@@ -370,7 +370,8 @@ function FormDialog() {
             />
           )}
           {/* {(gutiradata[0][selectedmonth]?.prevdebt > 0) && ( */}
-          <TextField
+          {isthere > 0 && (
+            <TextField
             autoFocus
             required
             margin="dense"
@@ -381,7 +382,8 @@ function FormDialog() {
             type="number"
             fullWidth
             variant="standard"
-          />
+            />
+            )}
           {/* // )} */}
           {/* </> */}
           {/* // )} */}
