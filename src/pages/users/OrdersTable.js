@@ -177,38 +177,42 @@ export default function OrderTable() {
               const isItemSelected = isSelected(row.trackingNo);
               const labelId = `enhanced-table-checkbox-${index}`;
               return (
-                <TableRow
-                  hover
-                  role="checkbox"
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  aria-checked={isItemSelected}
-                  tabIndex={-1}
-                  key={row.names}
-                  selected={isItemSelected}
-                >
-                  <TableCell component="th" id={labelId} scope="row" align="left">
-                    <Link color="secondary" component={RouterLink} to="">
-                      {row.names}
-                    </Link>
-                  </TableCell>
-                  <TableCell align="left">
-                    <NumberFormat value={row?.telephone} displayType="text" prefix='0'/>
-                  </TableCell>
-                  <TableCell align="left">{row?.nid}</TableCell>
-                  <TableCell align="left">{row?.sector}</TableCell>
-                  <TableCell align="left">{row?.cell}</TableCell>
-                  <TableCell align="left">{row?.village}</TableCell>
-                  <TableCell align="right">
-                    <Button
-                      variant="outlined"
-                      onClick={() => {
-                        dispatch(toggleModals({ editmember: true,editData:row }));
-                      }}
+                <>
+                  {row?.role !== 1 && (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={row.names}
+                      selected={isItemSelected}
                     >
-                      Hindura amakuru
-                    </Button>
-                  </TableCell>
-                </TableRow>
+                      <TableCell component="th" id={labelId} scope="row" align="left">
+                        <Link color="secondary" component={RouterLink} to="">
+                          {row.names}
+                        </Link>
+                      </TableCell>
+                      <TableCell align="left">
+                        <NumberFormat value={row?.telephone} displayType="text" prefix="0" />
+                      </TableCell>
+                      <TableCell align="left">{row?.nid}</TableCell>
+                      <TableCell align="left">{row?.sector}</TableCell>
+                      <TableCell align="left">{row?.cell}</TableCell>
+                      <TableCell align="left">{row?.village}</TableCell>
+                      <TableCell align="right">
+                        <Button
+                          variant="outlined"
+                          onClick={() => {
+                            dispatch(toggleModals({ editmember: true, editData: row }));
+                          }}
+                        >
+                          Hindura amakuru
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </>
               );
             })}
           </TableBody>
