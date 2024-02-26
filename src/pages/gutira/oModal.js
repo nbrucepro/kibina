@@ -128,14 +128,15 @@ function FormDialog() {
     const mm = [];
     if (membersdata?.length > 0) {
       for (const me of membersdata) {
-        mm.push({
-          id: me?.nid,
-          value: me?.nid,
-          label: `${toscapitalize(me?.names)}`
-        });
+        if(me.role !== 1){
+          mm.push({
+            id: me?.nid,
+            value: me?.nid,
+            label: `${toscapitalize(me?.names)}`
+          });
+        }
       }
       setUsersm(mm);
-      // setValue(membersdata[0]?.nid || '');
     }
   }, [membersdata]);
   function membersdatafilter(value) {

@@ -127,14 +127,15 @@ function FormDialog() {
     const mm = [];
     if (membersdata?.length > 0) {
       for (const me of membersdata) {
-        mm.push({
-          id: me?.nid,
-          value: me?.nid,
-          label: `${toscapitalize(me?.names)}`
-        });
+        if(me.role !== 1){
+          mm.push({
+            id: me?.nid,
+            value: me?.nid,
+            label: `${toscapitalize(me?.names)}`
+          });
+        }
       }
       setUsersm(mm);
-      // setValue(membersdata[0]?.nid || '');
     }
   }, [membersdata]);
   function membersdatafilter(value) {
@@ -296,7 +297,6 @@ function FormDialog() {
             // value={value === null ? ' <em style={{color:"gray"}}>Select an option</em>' : value}
             value={value}
             onChange={(e) => {
-              console.log('e.target.value', e.target.value);
               setValue(e.target.value);
               membersdatafilter(e.target.value);
             }}
