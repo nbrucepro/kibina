@@ -232,7 +232,8 @@ function FormDialog() {
                 const sharedebtM = `month${docSnapshot.data()?.sharedebt}`;
                 const docDataPrevMonth = docSnapshot.data()[sharedebtM];
                 const alreadpaid = docDataPrevMonth.paid + paid;
-                const debt = docDataPrevMonth?.loanwithintereset !== 0 ? docDataPrevMonth?.loanwithintereset - paid : loan;
+                const loanwithintmathed= docDataPrevMonth?.loanwithintereset - paid < 0 ? 0 : docDataPrevMonth?.loanwithintereset - paid
+                const debt = docDataPrevMonth?.loanwithintereset !== 0 ? loanwithintmathed : loan;
                 const interest = (debt * 3) / 100;
                 const loanwithintereset = interest + debt;
                 // const theextras = loanwithintereset < 0 ? Math.abs(loanwithintereset) : 0;
@@ -272,7 +273,8 @@ function FormDialog() {
                 const docSnapshot = querySnapshot.docs[0];
                 const docDataPrevMonth = selectedmonth === 'month1' ? docSnapshot.data()[selectedmonth] : docSnapshot.data()[selectedmonth];
                 const alreadpaid = paid ? docDataPrevMonth.paid + paid : docDataPrevMonth.paid;
-                const debt = docDataPrevMonth?.loanwithintereset !== 0 ? docDataPrevMonth?.loanwithintereset - paid : loan;
+                const loanwithintmathed= docDataPrevMonth?.loanwithintereset - paid < 0 ? 0 : docDataPrevMonth?.loanwithintereset - paid
+                const debt = docDataPrevMonth?.loanwithintereset !== 0 ? loanwithintmathed : loan;
                 const interest = (debt * 3) / 100;
                 const loanwithintereset = interest + debt;
                 const sharedebt = parseInt(selectedmonth.match(/\d+$/)[0]);
