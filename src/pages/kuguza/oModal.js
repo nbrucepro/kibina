@@ -123,10 +123,35 @@ function FormDialog() {
   }
   const [loading, setLoading] = React.useState(false);
   const [usersm, setUsersm] = React.useState([]);
+  // const updates = async(me)=>{
+  //   const kuguzajson ={sharedebt:0}
+  //   const iterableArray = Array.from({ length: 12 }, (_, index) => index + 1);
+  //   iterableArray.forEach((id) => {
+  //     kuguzajson[`month${id}`] = {
+  //       loan: 0,
+  //       interest: 0,
+  //       loanwithintereset: 0,
+  //       paid: 0,
+  //       debt: 0,
+  //       prevdebt: 0
+  //     };      
+  //   });
+  //   // console.log(kuguzajson)
+  //   // console.log(me)
+  //   const querySnapshot = await getDocs(query(kuguzaDb, where('nid', '==', me)));
+  //   console.log(querySnapshot.docs[0].id);
+  //   if(!querySnapshot.empty){
+  //     const docSnapshot = querySnapshot.docs[0]; 
+  //     console.log("hihih",querySnapshot.docs[0]?.id)
+  //     // await updateDoc(doc(kuguzaDb,querySnapshot.docs[0]?.id),kuguzajson)
+  //     await updateDoc(doc(kuguzaDb, docSnapshot.id), kuguzajson);
+  //   }
+  // }
   React.useEffect(() => {
     const mm = [];
     if (membersdata?.length > 0) {
       for (const me of membersdata) {
+        // updates(me?.nid)
         if(me.role !== 1){
           mm.push({
             id: me?.nid,

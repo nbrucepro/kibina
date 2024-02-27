@@ -225,14 +225,14 @@ export default function OrderTable() {
                     </TableCell>
                     <TableCell align="left">
                       <NumberFormat
-                        value={row?.ayishyuweKuguza-(row?.ayagujijweTotal + row?.kuguzaDept)}
+                        value={(row?.ayishyuweKuguza-(row?.ayagujijweTotal + row?.kuguzaDept) > 0 ? 0 : row?.ayishyuweKuguza-(row?.ayagujijweTotal + row?.kuguzaDept))}
                         displayType="text"
                         thousandSeparator
                         prefix="Frw "
                       />
                     </TableCell>
                     <TableCell align="left">
-                      <NumberFormat value={row?.ayishyuweGutira-(row?.ayatiriweTotal + row?.gutiraDept)} displayType="text" thousandSeparator prefix="Frw " />
+                      <NumberFormat value={(row?.ayishyuweGutira-(row?.ayatiriweTotal + row?.gutiraDept) > 0 ? 0 : row?.ayishyuweGutira-(row?.ayatiriweTotal + row?.gutiraDept))} displayType="text" thousandSeparator prefix="Frw " />
                     </TableCell>
                     <TableCell align="right">
                       <NumberFormat value={whatwehave} displayType="text" thousandSeparator prefix="Frw " />
