@@ -62,13 +62,13 @@ const headCells = [
     id: 'atariyishurwa1',
     align: 'left',
     disablePadding: true,
-    label: 'Atari yishyurwa-kuguza'
+    label: 'Ideni kuguza'
   },
   {
     id: 'atariyishurwa2',
     align: 'left',
     disablePadding: true,
-    label: 'Atari yishyurwa-gutira'
+    label: 'Ideni gutira'
   },
   {
     id: 'protein',
@@ -224,15 +224,20 @@ export default function OrderTable() {
                       <NumberFormat value={row?.ayishyuweGutira} displayType="text" thousandSeparator prefix="Frw " />
                     </TableCell>
                     <TableCell align="left">
+                      {row?.kuguzaDept}
                       <NumberFormat
-                        value={(row?.ayishyuweKuguza-(row?.ayagujijweTotal + row?.kuguzaDept) > 0 ? 0 : row?.ayishyuweKuguza-(row?.ayagujijweTotal + row?.kuguzaDept))}
+                      value={row?.kuguzaDebt}
+                        // value={(row?.ayishyuweKuguza-(row?.ayagujijweTotal + row?.kuguzaDept) > 0 ? 0 : row?.ayishyuweKuguza-(row?.ayagujijweTotal + row?.kuguzaDept))}
                         displayType="text"
                         thousandSeparator
                         prefix="Frw "
                       />
                     </TableCell>
                     <TableCell align="left">
-                      <NumberFormat value={(row?.ayishyuweGutira-(row?.ayatiriweTotal + row?.gutiraDept) > 0 ? 0 : row?.ayishyuweGutira-(row?.ayatiriweTotal + row?.gutiraDept))} displayType="text" thousandSeparator prefix="Frw " />
+                      <NumberFormat 
+                      value={row?.gutiraDebt}
+                      // value={(row?.ayishyuweGutira-(row?.ayatiriweTotal + row?.gutiraDept) > 0 ? 0 : row?.ayishyuweGutira-(row?.ayatiriweTotal + row?.gutiraDept))} 
+                      displayType="text" thousandSeparator prefix="Frw " />
                     </TableCell>
                     <TableCell align="right">
                       <NumberFormat value={whatwehave} displayType="text" thousandSeparator prefix="Frw " />

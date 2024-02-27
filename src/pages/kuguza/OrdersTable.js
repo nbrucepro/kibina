@@ -185,26 +185,30 @@ export default function OrderTable() {
   }, []);
   const arrayOfArrays = [];
 
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < 3; i++) {
     arrayOfArrays.push([]);
   }
   const previousTotal = useRef(0);
   const previousTotal2 = useRef(0);
-  const updateCuturatotal = async (total,total2) => {
+  const previousTotal3 = useRef(0);
+  const updateCuturatotal = async (total,total2,total3) => {
     const querySnapshot2 = await getDocs(query(sreportDb));
 
     await updateDoc(doc(sreportDb, querySnapshot2.docs[0].id), {
       ayagujijweTotal: total,
       ayishyuweKuguza: total2,
+      kuguzaDebt: total3,
     });
   };
   useEffect(() => {
     const total = arrayOfArrays[0].reduce((acc, cur) => acc + cur, 0);
     const total2 = arrayOfArrays[1].reduce((acc, cur) => acc + cur, 0);
+    const total3 = arrayOfArrays[2].reduce((acc, cur) => acc + cur, 0);
     if (total !== previousTotal.current || total === 0) {
-      updateCuturatotal(total,total2);
+      updateCuturatotal(total,total2,total3);
       previousTotal.current = total; 
       previousTotal2.current = total2; 
+      previousTotal3.current = total3; 
     }
   }, [arrayOfArrays, kuguzadata]);
   return (
@@ -237,8 +241,10 @@ export default function OrderTable() {
                 const isItemSelected = isSelected(row.trackingNo);
                 const labelId = `enhanced-table-checkbox-${index}`;
                 for (let i = 1; i <= 12; i++) {
+                  const mfmf = row[`month${i}`]?.debt +  row[`month${i}`]?.interest;
                   arrayOfArrays[0].push(row[`month${i}`]?.loan);
                   arrayOfArrays[1].push(row[`month${i}`]?.paid);
+                  arrayOfArrays[2].push(mfmf);
                 }
                 return (
                   <TableRow
