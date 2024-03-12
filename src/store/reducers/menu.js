@@ -14,6 +14,8 @@ const initialState = {
   gutiradata:[],
   membersdata:[],
   sreportData:[],
+  expensesData:[],
+  penalitiesData:[],
   selectedmonth:"",
   modals:{
     li: false
@@ -65,6 +67,13 @@ const menu = createSlice({
     sreportFromfir: (state, action) => {
       state.sreportData = action.payload;
     },
+    expensesFromfir: (state, action) => {
+      state.expensesData = action.payload;
+    },
+    penalitiesFromfir: (state, action) => {
+      console.log("action.payload",action.payload);
+      state.penalitiesData = action.payload;
+    },
   }
 });
 
@@ -72,4 +81,4 @@ export default menu.reducer;
 
 export const {setselectedmonth, activeItem, activeComponent, 
   openDrawer, openComponentDrawer,guturaFromfir,kuguzaFromfir,
-  gutiraFromfir,membersFromfir,toggleModals,sreportFromfir,ingobokaFromfir } = menu.actions;
+  gutiraFromfir,membersFromfir,toggleModals,sreportFromfir,ingobokaFromfir,expensesFromfir,penalitiesFromfir } = menu.actions;

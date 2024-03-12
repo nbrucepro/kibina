@@ -5,11 +5,13 @@ import { Navigate,Outlet } from 'react-router-dom';
 import Login from 'pages/login/index';
 import ShortReport from 'pages/report/index';
 import Ingoboka from 'pages/ingoboka/index';
+import Penalities from 'pages/penalities/index';
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 const Kuguza = Loadable(lazy(() => import('pages/kuguza')));
 const Gutira = Loadable(lazy(() => import('pages/gutira')));
 const Users = Loadable(lazy(() => import('pages/users')));
 const Imigabane = Loadable(lazy(() => import('pages/imigabane')));
+// const Penalities = Loadable(lazy(() => import('pages/penalities')));
 
 const usersmString = localStorage.getItem("userm");
 const usersm = usersmString ? JSON.parse(usersmString) : null;
@@ -47,6 +49,10 @@ const MainRoutes =
     {
       path: '/app/shortreport',
       element: <ShortReport />
+    },
+    {
+      path: '/app/penalities',
+      element: <Penalities />
     },
     { path: '/app/', element: <Navigate to="/app/gutura" /> }
     ,

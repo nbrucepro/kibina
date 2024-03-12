@@ -62,6 +62,13 @@ const dashboard = {
   loggedInusersm?.role === 1 &&
     dashboard.children.push(
       {
+        id: 'Penalities',
+        title: 'Andi yinjiye',
+        type: 'item',
+        url: '/app/penalities',
+        icon: icons.ChromeOutlined
+      },
+      {
         id: 'users',
         title: 'Members',
         type: 'item',
