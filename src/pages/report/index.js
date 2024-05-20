@@ -18,7 +18,7 @@ import { sreportFromfir } from 'store/reducers/menu';
 const yearStatus = [
   {
     value: '2024',
-    label: '2024'
+    label: '2023'
   }
 ];
 

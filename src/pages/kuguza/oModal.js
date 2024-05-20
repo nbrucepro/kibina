@@ -136,13 +136,9 @@ function FormDialog() {
   //       prevdebt: 0
   //     };      
   //   });
-  //   // console.log(kuguzajson)
-  //   // console.log(me)
   //   const querySnapshot = await getDocs(query(kuguzaDb, where('nid', '==', me)));
-  //   console.log(querySnapshot.docs[0].id);
   //   if(!querySnapshot.empty){
   //     const docSnapshot = querySnapshot.docs[0]; 
-  //     console.log("hihih",querySnapshot.docs[0]?.id)
   //     // await updateDoc(doc(kuguzaDb,querySnapshot.docs[0]?.id),kuguzajson)
   //     await updateDoc(doc(kuguzaDb, docSnapshot.id), kuguzajson);
   //   }

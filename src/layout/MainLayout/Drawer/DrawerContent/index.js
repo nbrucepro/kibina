@@ -23,7 +23,6 @@ const DrawerContent = () => (
     }}
 
       onClick={() => {
-        console.log('logged out');
         localStorage.removeItem('userm')
         window.location.reload()
       }}

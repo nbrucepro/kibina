@@ -148,13 +148,9 @@ function FormDialog() {
   //       paid: 0,
   //     };      
   //   });
-  //   console.log(kuguzajson)
-  //   console.log(me)
   //   // const querySnapshot = await getDocs(query(penalitiesDb, where('nid', '==', me)));
-  //   // console.log(querySnapshot.docs[0].id);
   //   // if(!querySnapshot.empty){
   //   //   const docSnapshot = querySnapshot.docs[0]; 
-  //   //   console.log("hihih",querySnapshot.docs[0]?.id)
   //   //   // await updateDoc(doc(penalitiesDb,querySnapshot.docs[0]?.id),kuguzajson)
   //   //   await updateDoc(doc(penalitiesDb, docSnapshot.id), kuguzajson);
   //   // }
@@ -260,8 +256,6 @@ function FormDialog() {
                        year:2024
                 };
                 iterableArray.forEach((id) => {
-                  console.log(`month${id}`);
-                  console.log(`month${id}` === selectedmonth)
                   if (`month${id}` === selectedmonth) {
                           data[`month${id}`] = {
                             reason: reasonValue,
@@ -269,7 +263,6 @@ function FormDialog() {
                           }; 
                   } 
                 });
-                console.log(data);
                 await addDoc(penalitiesDb, data);
                 getKuguza(selectedmonth);
               }

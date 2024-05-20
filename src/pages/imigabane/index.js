@@ -17,7 +17,7 @@ import MainCard from 'components/MainCard';
 const yearStatus = [
   {
     value: '2024',
-    label: '2024'
+    label: '2023'
   }
 ];
 
@@ -29,7 +29,6 @@ const Imigabane = () => {
   // const [slot, setSlot] = useState('week');
   // const get
   // const { membersdata } = useSelector((state) => state.menu);
-  // console.log(membersdata);
   // const instmigabane = async ()=>{
     
     // const imigabaneDb = collection(database, 'imigabane');

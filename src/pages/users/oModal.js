@@ -113,7 +113,6 @@ function FormDialog() {
   const numPasswords = 5;
   const passwordLength = 8;
   const uniquePasswords = generateUniquePasswords(1, 5);
-  console.log(uniquePasswords);
   
   return (
     <React.Fragment>
@@ -143,8 +142,6 @@ function FormDialog() {
             const querySnapshot2 = await getDocs(query2);
             const querySnapshot3 = await getDocs(query(sreportDb));
             // const querySnapshot = await getDocs(query(membersDb, where('nid', '==', parseInt(nidValue)),where('telephone', '==', parseInt(telValue))));
-            // console.log(querySnapshot.empty);
-            console.log(parseInt(telValue));
             if (editmember) {
               const data = {
                 names,

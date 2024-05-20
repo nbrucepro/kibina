@@ -252,8 +252,6 @@ export default function OrderTable() {
       previousTotal.current = total; // Update the previous total
     }
     // if(guturadata?.length > 0 && total){
-    //   console.log('gutaraReportdata',gutaraReportdata)
-    //   console.log(guturadata?.length);
     //   dispatch(toggleModals({ gutaraReportdata }));
     // }
 

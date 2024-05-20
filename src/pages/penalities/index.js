@@ -27,7 +27,7 @@ import { database } from 'config/direabse.config';
 const yearStatus = [
   {
     value: '2024',
-    label: '2024'
+    label: '2023'
   }
 ];
 const monthStatus = [
@@ -99,7 +99,6 @@ const Kuguza = () => {
     for (const members of ridesSnapshot?.docs) {
       ridesData.push({ ...members.data() });
     }
-    console.log("q",ridesData);
     dispatch(penalitiesFromfir(ridesData));
   };
   useEffect(() => {

@@ -215,7 +215,6 @@ function FormDialog() {
                 // const debt = docDataPrevMonth?.loanwithintereset !== 0 ? docDataPrevMonth?.loanwithintereset - paid : loan;
                 const prevsharedebt = parseInt(selectedmonth.match(/\d+$/)[0]);
                 const ubukererwe = prevsharedebt - docSnapshot.data()?.sharedebt >= 2
-                console.log("ubukererwe",ubukererwe)
                 const interest = ubukererwe ? (debt * 7) / 100 :(debt * 5) / 100;
                 const loanwithintereset = interest + debt;
                 const theextras = loanwithintereset < 0 ? Math.abs(loanwithintereset) : 0;
@@ -311,7 +310,6 @@ function FormDialog() {
             // value={value === null ? ' <em style={{color:"gray"}}>Select an option</em>' : value}
             value={value}
             onChange={(e) => {
-              console.log('e.target.value', e.target.value);
               setValue(e.target.value);
               membersdatafilter(e.target.value);
             }}

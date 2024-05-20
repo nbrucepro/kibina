@@ -161,9 +161,9 @@ export default function OrderTable() {
     // retudata()
   }, []);
   const { guturadata } = useSelector((state) => state.menu);
+  const sreportDb = collection(database, 'sreport');
   const [members, setMembers] = useState([]);
   const membersDb = collection(database, 'members');
-  const sreportDb = collection(database, 'sreport');
   const getmebers = async () => {
     const q = query(membersDb);
     const ridesSnapshot = await getDocs(q);

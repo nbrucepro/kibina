@@ -57,7 +57,6 @@ export default function Login() {
   //     setOtpSent(true);
   //   }
   //   catch(error){
-  //     console.log("error",error);
   //   }
   // }
   const handleSubmit = async (event) => {
@@ -69,7 +68,6 @@ export default function Login() {
 
     const querySnapshot = await getDocs(query(membersDb, where('telephone', '==', parseInt(telValue))));
     if (!querySnapshot.empty) {
-      console.log('querySnapshot?.docs[0].data()', querySnapshot?.docs[0].data());
       localStorage.setItem('userm', JSON.stringify(querySnapshot?.docs[0].data()));
       navigate('/app/gutura');
       window.location.reload()

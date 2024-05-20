@@ -71,7 +71,6 @@ const menu = createSlice({
       state.expensesData = action.payload;
     },
     penalitiesFromfir: (state, action) => {
-      console.log("action.payload",action.payload);
       state.penalitiesData = action.payload;
     },
   }
